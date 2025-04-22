@@ -11,7 +11,7 @@
         J'ai acheté un sac de croquettes !
       </UButton>
       <UButton v-if="currentFoodBag" icon="i-lucide-package-open" variant="outline" color="neutral"
-               class="relative overflow-hidden current-food">
+               class="relative overflow-hidden current-food" @click="finishFoodBag">
         <span :class="['current-food-progress', 'absolute', 'top-0 left-0 bottom-0',
            {'bg-green-500/25': currentFoodBag.used.percentage < 75,
             'bg-amber-500/25' : currentFoodBag.used.percentage >= 75 && currentFoodBag.used.percentage < 90,
@@ -20,7 +20,11 @@
         <span class="current-food-text">1 sac de croquettes</span>
         <span class="current-food-finish">Sac terminé !</span>
       </UButton>
-      <UButton v-if="stockFoodBags" icon="i-lucide-package" variant="outline" color="neutral">{{ stockDisplay }}</UButton>
+      <UButton v-if="stockFoodBags && stockFoodBags.length" icon="i-lucide-package" variant="outline" color="neutral" class="stock-food relative" @click="openFoodBag">
+        <span class="stock-food-progress absolute top-0 left-0 bottom-0 bg-green-500/25 w-0"></span>
+        <span class="stock-food-text">{{ stockDisplay }}</span>
+        <span class="stock-food-open">Ouvrir le sac !</span>
+      </UButton>
     </div>
   </div>
 </template>
@@ -33,7 +37,7 @@ const foodBags = ref([
     brand: 'Wilderness',
     weight: 12,
     state: 'open',
-    openDate: new Date('2025-03-21')
+    openDate: new Date('2025-03-28')
   },
   {
     brand: 'Wilderness',
@@ -42,9 +46,18 @@ const foodBags = ref([
   }
 ]);
 
-const currentFoodBag = computed(() => {
-  const current = foodBags.value.find(f => f.state === 'open');
-  return {...current, used: computeFoodBagPercentage(current)}
+const currentFoodBag = computed({
+  get() {
+    const current = foodBags.value.find(f => f.state === 'open');
+    if (!current) {
+       return;
+    }
+    return {...current, used: computeFoodBagPercentage(current)}
+  },
+  set(state: string) {
+    const current = foodBags.value.find(f => f.state === 'open');
+    current!.state = state;
+  }
 });
 const stockFoodBags = computed(() => foodBags.value.filter(f => f.state === 'stock'));
 const stockDisplay = computed(() => `${stockFoodBags.value.length} sac${stockFoodBags.value.length > 1 ? 's' : ''} en réserve`);
@@ -65,7 +78,18 @@ const addFoodBag = () => {
 }
 
 const finishFoodBag = () => {
+  currentFoodBag.value = 'empty'
+}
 
+const openFoodBag = () => {
+  for(const f of foodBags.value) {
+    if (f.state === 'stock') {
+      f.openDate = new Date();
+      f.state = 'open';
+      return;
+    }
+  }
+  return;
 }
 
 const updateMealQuantity = () => {
@@ -94,13 +118,28 @@ const updateMealQuantity = () => {
   }
 }
 
+.stock-food:hover {
+  & .stock-food-text {
+    display: none;
+  }
+  & .stock-food-open {
+    display: block;
+  }
+  & .stock-food-progress {
+    width: 100% !important;
+  }
+}
+
 .current-food-progress {
   transition: width 0.25s ease-in-out;
 }
-.current-food-text {
-  display: block;
+.stock-food-progress {
+  transition: width 0.25s ease-in-out;
 }
 .current-food-finish {
+  display: none;
+}
+.stock-food-open {
   display: none;
 }
 </style>
