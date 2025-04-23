@@ -6,7 +6,7 @@
         <UInput v-model="meal" type="text" variant="ghost" color="neutral" class="relative meal" :style="{width: `${(meal+'').length + 4}ch`}" @change="updateMealQuantity" />
         de croquettes par jour !</p>
     </div>
-    <div class="flex flex-col w-80 gap-y-4">
+    <div class="flex flex-col gap-y-4">
       <UButton icon="i-lucide-package-plus" variant="outline" color="neutral" @click="addFoodBag">
         J'ai acheté un sac de croquettes !
       </UButton>
@@ -20,10 +20,10 @@
         <span class="current-food-text">1 sac de croquettes</span>
         <span class="current-food-finish">Sac terminé !</span>
       </UButton>
-      <UButton v-if="stockFoodBags && stockFoodBags.length" icon="i-lucide-package" variant="outline" color="neutral" class="stock-food relative" @click="openFoodBag">
-        <span class="stock-food-progress absolute top-0 left-0 bottom-0 bg-green-500/25 w-0"></span>
+      <UButton v-if="stockFoodBags && stockFoodBags.length" icon="i-lucide-package" variant="outline" color="neutral" :class="['relative overflow-hidden', !currentFoodBag && 'stock-food']" @click="openFoodBag">
+        <span v-if="!currentFoodBag" class="stock-food-progress absolute top-0 left-0 bottom-0 bg-green-500/25 w-0"></span>
         <span class="stock-food-text">{{ stockDisplay }}</span>
-        <span class="stock-food-open">Ouvrir le sac !</span>
+        <span v-if="!currentFoodBag" class="stock-food-open">Ouvrir le sac !</span>
       </UButton>
     </div>
   </div>
@@ -105,41 +105,40 @@ const updateMealQuantity = () => {
   vertical-align: middle;
 }
 
-.current-food:hover {
-  & .current-food-text {
-    display: none;
-  }
-  & .current-food-finish {
-    display: block;
-  }
-  & .current-food-progress {
-    width: 100% !important;
-    background: color-mix(in srgb, var(--color-green-500) 25%, transparent);
-  }
+.current-food, .stock-food {
+  transition: all .3s ease;
 }
 
-.stock-food:hover {
-  & .stock-food-text {
-    display: none;
-  }
-  & .stock-food-open {
-    display: block;
-  }
-  & .stock-food-progress {
-    width: 100% !important;
-  }
+.current-food-progress, .stock-food-progress {
+  transition: width 0.3s ease-out;
 }
 
-.current-food-progress {
-  transition: width 0.25s ease-in-out;
+.current-food-text, .current-food-finish, .stock-food-text, .stock-food-open {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  width: 100%;
+  margin-left: calc(var(--spacing) * 7);
+  text-align: left;
 }
-.stock-food-progress {
-  transition: width 0.25s ease-in-out;
+
+.current-food-finish, .stock-food-open {
+  opacity: 0;
+  transform: translateY(20px);
 }
-.current-food-finish {
-  display: none;
+
+.current-food:hover .current-food-text, .stock-food:hover .stock-food-text {
+  opacity: 0;
+  transform: translateY(-20px);
 }
-.stock-food-open {
-  display: none;
+
+.current-food-text, .current-food:hover .current-food-finish, .stock-food-text, .stock-food:hover .stock-food-open {
+  opacity: 1;
+  transform: translateY(0);
 }
+
+.current-food:hover .current-food-progress, .stock-food:hover .stock-food-progress {
+  width: 100% !important;
+}
+
+
 </style>
