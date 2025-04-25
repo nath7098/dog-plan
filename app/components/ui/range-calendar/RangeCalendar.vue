@@ -9,7 +9,7 @@ import {
 } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 import { RangeCalendarCell, RangeCalendarCellTrigger, RangeCalendarGrid, RangeCalendarGridBody, RangeCalendarGridHead, RangeCalendarGridRow, RangeCalendarHeadCell, RangeCalendarHeader, RangeCalendarHeading, RangeCalendarNextButton, RangeCalendarPrevButton } from '.'
-import type { Grid, Matcher, WeekDayFormat } from 'reka-ui/date';
+import type { DateValue, Grid, Matcher, WeekDayFormat } from 'reka-ui/date';
 
 declare type Direction = 'ltr' | 'rtl';
 
@@ -59,7 +59,7 @@ declare type RangeCalendarRootContext = {
 
 const props = defineProps<RangeCalendarRootProps & { class?: HTMLAttributes['class'] }>()
 
-const emits = defineEmits<RangeCalendarRootEmits & {'custom:modelValue': [date: DateRange]}>()
+const emits = defineEmits<RangeCalendarRootEmits & { 'custom:modelValue': [date: DateRange] }>()
 
 const delegatedProps = computed(() => {
   const { class: _, ...delegated } = props
@@ -70,32 +70,82 @@ const delegatedProps = computed(() => {
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
 
 const customCalendar = ref(null);
+const provides = computed(() => {
+  if (customCalendar.value) {
+    const provides = customCalendar.value.$.provides;
+
+    const symbols = Object.getOwnPropertySymbols(provides);
+
+    const data = provides[symbols[0]];
+    return data;
+  }
+  return null;
+});
+
+const endDateValue = computed({
+  get() {
+    if (customCalendar.value) {
+    const data = provides.value;
+    return data.endValue;
+  }
+  return null;
+  },
+  set(v) {
+    if (customCalendar.value) {
+    const data = provides.value;
+    data.endValue = v;
+  }
+  }
+})
+
+const modelValueComp = computed({
+  get() {
+    if (customCalendar.value) {
+    const data = provides.value;
+    return data.modelValue;
+  }
+  return null;
+  },
+  set(v) {
+    if (customCalendar.value) {
+    const data = provides.value;
+    data.modelValue = v;
+  }
+  }
+})
+
+const startDateValue = computed(() => {
+  if (customCalendar.value) {
+    const data = provides.value;
+    return data.startValue;
+  }
+  return null;
+});
 
 watch(() => delegatedProps.value.modelValue, (value, old) => {
-  console.log(value, old)
-  const provides = customCalendar.value.$.provides;
+  if (customCalendar.value) {
+    const provides = customCalendar.value.$.provides;
 
-  console.log(provides);
-  const symbols = Object.getOwnPropertySymbols(provides);
-  console.log(symbols);
-  symbols.forEach((sym, index) => {
-    console.log(`Symbol ${index}:`, sym.description, provides[sym]);
-  });
-  symbols
-  // if (value && (!old || value.start !== old.start)) {
-  //   emits('custom:modelValue', value)
-  // }
+    const symbols = Object.getOwnPropertySymbols(provides);
+
+    const data = provides[symbols[0]];
+    console.log(data);
+  }
 });
+
+watch(startDateValue, (startDate, old) => {
+  console.log('start date changed !');
+  if (startDate.value) {
+    endDateValue.value = startDate.value.add({days: 30});
+    modelValueComp.value = {start: startDate.value, end: endDateValue.value};
+    emits('custom:modelValue', startDate.value);
+  }
+}, { deep: true });
 </script>
 
 <template>
-  <RangeCalendarRoot
-      ref="customCalendar"
-    v-slot="{ grid, weekDays }"
-    data-slot="range-calendar"
-    :class="cn('p-3', props.class)"
-    v-bind="forwarded"
-  >
+  <RangeCalendarRoot ref="customCalendar" v-slot="{ grid, weekDays }" data-slot="range-calendar"
+    :class="cn('p-3', props.class)" v-bind="forwarded">
     <RangeCalendarHeader>
       <RangeCalendarHeading />
 
@@ -109,25 +159,15 @@ watch(() => delegatedProps.value.modelValue, (value, old) => {
       <RangeCalendarGrid v-for="month in grid" :key="month.value.toString()">
         <RangeCalendarGridHead>
           <RangeCalendarGridRow>
-            <RangeCalendarHeadCell
-              v-for="day in weekDays" :key="day"
-            >
+            <RangeCalendarHeadCell v-for="day in weekDays" :key="day">
               {{ day }}
             </RangeCalendarHeadCell>
           </RangeCalendarGridRow>
         </RangeCalendarGridHead>
         <RangeCalendarGridBody>
           <RangeCalendarGridRow v-for="(weekDates, index) in month.rows" :key="`weekDate-${index}`" class="mt-2 w-full">
-            <RangeCalendarCell
-              v-for="weekDate in weekDates"
-              :key="weekDate.toString()"
-              :date="weekDate"
-            >
-              <RangeCalendarCellTrigger
-                :day="weekDate"
-                :month="month.value"
-                class="rounded-full"
-              />
+            <RangeCalendarCell v-for="weekDate in weekDates" :key="weekDate.toString()" :date="weekDate">
+              <RangeCalendarCellTrigger :day="weekDate" :month="month.value" class="rounded-full" />
             </RangeCalendarCell>
           </RangeCalendarGridRow>
         </RangeCalendarGridBody>
