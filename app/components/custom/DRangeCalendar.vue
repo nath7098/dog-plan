@@ -4,12 +4,12 @@
     <!-- Calendar Header -->
     <div class="flex justify-between items-center w-full p-2">
       <UButton variant="outline" size="sm" color="neutral" icon="i-heroicons-chevron-left" @click="prevMonth"/>
-      <h3 class="text-md text-neutral-100 font-weight-semibold">{{ monthName }}</h3>
+      <h3 class="text-md dark:text-neutral-100 text-neutral-900 font-weight-semibold">{{ monthName }}</h3>
       <UButton variant="outline" size="sm" color="neutral" icon="i-heroicons-chevron-right" @click="nextMonth"/>
     </div>
 
     <!-- Calendar Days Header -->
-    <div class="grid grid-cols-(--calendar-cols) text-center text-sm text-neutral-100">
+    <div class="grid grid-cols-(--calendar-cols) text-center text-sm dark:text-neutral-100 text-neutral-900">
       <div v-for="day in weekDays" :key="day" class="py-2">{{ day }}</div>
     </div>
 
@@ -18,14 +18,16 @@
       <div
           v-for="(day, index) in calendarDays"
           :key="index"
-          class="calendar-day"
-          :class="{
-            'other-month': !isCurrentMonth(day),
-            'today': isTodayDay(day),
-            'range-start': isRangeStart(day),
-            'range-end': isRangeEnd(day),
-            'in-range': isInRange(day) && !isRangeStart(day) && !isRangeEnd(day)
-          }"
+          :class="['calendar-day dark:text-neutral-950 text-neutral-50',
+           {
+            'other-month dark:text-neutral-500! text-neutral-600/60!': !isCurrentMonth(day),
+            'today *:rounded-full *:dark:bg-primary-200/45 *:bg-primary-300/45': isTodayDay(day),
+            '*:rounded-full dark:bg-neutral-700 *:dark:neutral-50 *:dark:text-neutral-950 bg-neutral-400 *:bg-neutral-950 *:text-neutral-50': isRangeStart(day) || isRangeEnd(day),
+            'range-start rounded-l-full': isRangeStart(day),
+            'range-end rounded-r-full': isRangeEnd(day),
+            'in-range dark:bg-neutral-700 bg-neutral-400': isInRange(day) && !isRangeStart(day) && !isRangeEnd(day),
+            'dark:text-neutral-50 text-neutral-950': !isInRange(day)
+          }]"
           @click="handleDateClick(day)"
       >
         <div class="h-full w-full">{{ day.day }}</div>
@@ -40,15 +42,24 @@ import { CalendarDate, isSameDay, isSameMonth, isToday, today, endOfMonth } from
 const props = defineProps({
   rangeLength: {
     type: Number,
-    default: 7
+    default: 7,
+    required: true
+  },
+  start : {
+    type: CalendarDate,
+    default: null,
+    required: false
   }
 });
+const emits = defineEmits(['select:date']);
 
 const weekDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 const currentMonth = ref(today());
+const startRef = toRef(props.start);
+const lengthRef = toRef(props.rangeLength);
 const selectedRange = ref({
-  start: null,
-  end: null
+  start: startRef.value ?? null,
+  end: startRef.value?.add({days: lengthRef.value}) ?? null
 });
 
 // Calculate month name
@@ -79,6 +90,7 @@ const handleDateClick = (date: CalendarDate) => {
   // If clicking on the start date, clear the selection
   if (selectedRange.value.start && isSameDay(date, selectedRange.value.start)) {
     selectedRange.value = {start: null, end: null};
+    emits('select:date', selectedRange.value);
     return;
   }
 
@@ -89,6 +101,7 @@ const handleDateClick = (date: CalendarDate) => {
     start: date,
     end: endDate
   };
+  emits('select:date', selectedRange.value);
 };
 
 // Check if a date is within the selected range
@@ -178,37 +191,6 @@ const calendarDays = computed(() => {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 
-  &.in-range {
-    background-color: var(--ui-color-neutral-700);
-  }
-
-  &.today {
-    & div {
-      background: color-mix(in srgb, var(--ui-color-primary-200) 45%, transparent);
-      border-radius: 100%;
-    }
-  }
-
-  &.range-start, &.range-end {
-    background-color: var(--ui-color-neutral-700);
-
-    & div {
-      background-color: var(--ui-color-neutral-50);
-      color: var(--ui-color-neutral-950) !important;
-      border-radius: 100%;
-    }
-  }
-
-  &.range-start {
-    border-top-left-radius: 100%;
-    border-bottom-left-radius: 100%;
-  }
-
-  &.range-end {
-    border-top-right-radius: 100%;
-    border-bottom-right-radius: 100%;
-  }
-
   & div {
     display: flex;
     align-items: center;
@@ -216,36 +198,25 @@ const calendarDays = computed(() => {
   }
 }
 
-.calendar-day:not(.other-month) {
-  color: var(--ui-color-neutral-50);
-}
-
 .calendar-day:not(.other-month):hover:not(.range-start):not(.range-end):not(.in-range):not(.today) div {
+  border-radius: .5rem;
+  background-color: color-mix(in srgb, var(--ui-color-neutral-400) 66%, transparent);
+}
+.dark .calendar-day:not(.other-month):hover:not(.range-start):not(.range-end):not(.in-range):not(.today) div {
   border-radius: .5rem;
   background-color: color-mix(in srgb, var(--ui-color-neutral-600) 66%, transparent);
 }
 
 .calendar-day.other-month:hover:not(.range-start):not(.range-end):not(.in-range):not(.today) div {
   border-radius: .5rem;
+  background-color: color-mix(in srgb, var(--ui-color-neutral-400) 33%, transparent);
+}
+.dark .calendar-day.other-month:hover:not(.range-start):not(.range-end):not(.in-range):not(.today) div {
+  border-radius: .5rem;
   background-color: color-mix(in srgb, var(--ui-color-neutral-600) 33%, transparent);
 }
 
 .other-month {
-  color: var(--ui-color-neutral-500);
-}
-
-.range-info {
-  padding: 1rem;
-  border-top: 1px solid #e5e7eb;
-  font-size: 0.875rem;
-  color: #4b5563;
-}
-
-.help-text {
-  padding: 1rem;
-  background-color: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-  font-size: 0.75rem;
-  color: #6b7280;
+  /*color: var(--ui-color-neutral-500);*/
 }
 </style>

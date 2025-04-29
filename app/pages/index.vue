@@ -4,15 +4,18 @@
     <USeparator class="my-4" />
     <DProfileFood :name="name" :meal-quantity="mealQuantity" @update-meal="onMealUpdated" class="w-90" />
     <USeparator class="my-4" />
-    <DProfileFlee :name="name" class="w-90" />
+    <div class="flex">
+      <DProfileFlea :name="name" class="w-90" />
+      <DProfileWorm :name="name" class="w-90" />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import DProfileHeader from '~/components/profile/DProfileHeader.vue';
 import DProfileFood from '~/components/profile/DProfileFood.vue';
-import { RangeCalendar } from '~/components/ui/range-calendar';
-import DProfileFlee from '~/components/profile/DProfileFlee.vue';
+import DProfileFlea from '~/components/profile/DProfileFlea.vue';
+import DProfileWorm from '~/components/profile/DProfileWorm.vue';
 
 const avatar = ref('https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 const name = ref('Venise');
