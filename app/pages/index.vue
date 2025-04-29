@@ -1,31 +1,43 @@
 <template>
-  <div class="p-4">
-    <DProfileHeader :avatar="avatar" :name="name" :gender="gender" :birth-date="birthDate" :weight="weight"  />
-    <USeparator class="my-4" />
-    <DProfileFood :name="name" :meal-quantity="mealQuantity" @update-meal="onMealUpdated" class="w-90" />
-    <USeparator class="my-4" />
-    <div class="flex">
-      <DProfileFlea :name="name" class="w-90" />
-      <DProfileWorm :name="name" class="w-90" />
-    </div>
+  <div class="p-6 max-w-6xl mx-auto space-y-6">
+    <UButton variant="outline" color="neutral" size="xl" class="p-6 rounded-full" to="nouveau">
+      <div class="flex justify-between w-6xl">
+        <UAvatar
+            icon="i-heroicons-plus-16-solid" :ui="{root: 'size-25 text-7xl'}" />
+        <div class="flex flex-col justify-center text-neutral-400">
+          <div class="text-xl">Petit nouveau</div>
+        </div>
+      </div>
+    </UButton>
+    <UButton v-for="animal in animals" :to="animal.name" variant="outline" color="neutral" size="xl" class="p-6  rounded-full">
+      <div class="flex justify-between w-6xl">
+        <UAvatar
+            :src="animal.avatar"
+            icon="i-fluent-animal-dog-16-regular" :ui="{root: 'size-25 text-7xl'}" />
+        <div class="flex flex-col justify-center text-neutral-400">
+          <div v-if="animal.gender" class="text-xl">{{animal.name}} <UIcon :name="animal.gender === 'male' ? 'i-ic-baseline-male' : 'i-ic-baseline-female'" :class="[animal.gender === 'male' ? 'text-blue-500' : 'text-pink-500']" /></div>
+          <div class="space-x-6">
+            <span v-if="displayAge">{{displayAge(age(animal.birthDate))}}</span>
+            <span>
+            {{animal.weight}} kg
+          </span>
+          </div>
+        </div>
+      </div>
+    </UButton>
   </div>
 </template>
-
 <script lang="ts" setup>
-import DProfileHeader from '~/components/profile/DProfileHeader.vue';
-import DProfileFood from '~/components/profile/DProfileFood.vue';
-import DProfileFlea from '~/components/profile/DProfileFlea.vue';
-import DProfileWorm from '~/components/profile/DProfileWorm.vue';
+import { ageToString, calculAge } from '~/utils/dates';
 
-const avatar = ref('https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-const name = ref('Venise');
-const gender = ref('female')
-const birthDate = ref('2024-10-15');
-const weight = ref(15);
-const mealQuantity = ref(309)
+const animalStore = useAnimalStore();
+const animals = animalStore.animals;
 
-const onMealUpdated = (meal) => {
-  console.log(meal)
-  mealQuantity.value = Number(meal.value);
-}
+const age = (bd) => {
+  return calculAge(bd);
+};
+
+const displayAge = (a) => {
+  return ageToString(a);
+};
 </script>

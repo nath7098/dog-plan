@@ -18,15 +18,17 @@
       <div
           v-for="(day, index) in calendarDays"
           :key="index"
-          :class="['calendar-day dark:text-neutral-950 text-neutral-50',
+          :class="['calendar-day',
            {
-            'other-month dark:text-neutral-500! text-neutral-600/60!': !isCurrentMonth(day),
+            'other-month text-foreground/40!': !isCurrentMonth(day),
             'today *:rounded-full *:dark:bg-primary-200/45 *:bg-primary-300/45': isTodayDay(day),
-            '*:rounded-full dark:bg-neutral-700 *:dark:neutral-50 *:dark:text-neutral-950 bg-neutral-400 *:bg-neutral-950 *:text-neutral-50': isRangeStart(day) || isRangeEnd(day),
+            '*:rounded-full dark:bg-neutral-700 *:dark:neutral-50 bg-neutral-400 *:bg-neutral-950 dark:*:text-foreground *:text-neutral-50': isRangeStart(day) || isRangeEnd(day),
             'range-start rounded-l-full': isRangeStart(day),
             'range-end rounded-r-full': isRangeEnd(day),
             'in-range dark:bg-neutral-700 bg-neutral-400': isInRange(day) && !isRangeStart(day) && !isRangeEnd(day),
-            'dark:text-neutral-50 text-neutral-950': !isInRange(day)
+            'text-foreground/80': !isInRange(day),
+            'rounded-l-full': isStartRow(index),
+            'rounded-r-full': isEndRow(index),
           }]"
           @click="handleDateClick(day)"
       >
@@ -103,6 +105,14 @@ const handleDateClick = (date: CalendarDate) => {
   };
   emits('select:date', selectedRange.value);
 };
+
+const isStartRow = (index: number) => {
+  return index % 7 === 0;
+}
+
+const isEndRow = (index: number) => {
+  return index % 7 === 6;
+}
 
 // Check if a date is within the selected range
 const isInRange = (date: CalendarDate) => {
@@ -214,9 +224,5 @@ const calendarDays = computed(() => {
 .dark .calendar-day.other-month:hover:not(.range-start):not(.range-end):not(.in-range):not(.today) div {
   border-radius: .5rem;
   background-color: color-mix(in srgb, var(--ui-color-neutral-600) 33%, transparent);
-}
-
-.other-month {
-  /*color: var(--ui-color-neutral-500);*/
 }
 </style>

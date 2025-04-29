@@ -1,0 +1,158 @@
+<template>
+  <div v-if="animal" class="p-6 max-w-6xl mx-auto">
+    <!-- Profile Header Section with Background -->
+    <div class="rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 p-6 shadow-sm">
+      <DProfileHeader
+          :avatar="animal.avatar"
+          :name="animal.name"
+          :gender="animal.gender"
+          :birth-date="animal.birthDate"
+          :weight="animal.weight"
+          @open:weight="toggleWeightHistory" />
+    </div>
+
+    <!-- Cards Grid Layout -->
+    <div class="grid md:grid-cols-2 gap-6 mt-6">
+      <!-- Food Management Card -->
+      <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
+        <DProfileFood :name="animal.name" :meal-quantity="animal.mealQuantity" @update-meal="onMealUpdated" />
+      </div>
+
+      <!-- Health Management Section -->
+      <div class="space-y-6">
+        <!-- Flea Treatment Card -->
+        <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
+          <DProfileFlea :name="animal.name" />
+        </div>
+
+        <!-- Deworming Card -->
+        <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
+          <DProfileWorm :name="animal.name" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Pet Stats Section -->
+    <div class="mt-6 rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800">
+      <h2 class="text-2xl mb-4 font-medium">Statistiques</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800">
+          <div class="text-xl font-medium text-green-800 dark:text-green-300">{{ animal.mealQuantity }}g</div>
+          <div class="text-sm text-green-600 dark:text-green-400">Croquettes par jour</div>
+        </div>
+        <div class="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 cursor-pointer" @click="toggleWeightHistory">
+          <div class="text-xl font-medium text-blue-800 dark:text-blue-300 flex items-center">
+            {{ animal.weight }} kg
+            <UIcon name="i-lucide-trending-up" class="ml-2" />
+          </div>
+          <div class="text-sm text-blue-600 dark:text-blue-400">Poids actuel</div>
+        </div>
+        <div class="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800">
+          <div class="text-xl font-medium text-purple-800 dark:text-purple-300">{{ animal.displayAge }}</div>
+          <div class="text-sm text-purple-600 dark:text-purple-400">Âge</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="mt-6 rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800">
+      <h2 class="text-2xl mb-4 font-medium">Actions rapides</h2>
+      <div class="flex flex-wrap gap-3">
+        <UButton icon="i-lucide-package-plus" color="green">Nouveau sac</UButton>
+        <UButton icon="i-lucide-calendar" color="blue">Prochain RDV véto</UButton>
+        <UButton icon="i-lucide-activity" color="amber" @click="openWeightHistory">Ajouter un poids</UButton>
+        <UButton icon="i-lucide-medal" color="purple">Ajouter un événement</UButton>
+      </div>
+    </div>
+
+    <!-- Weight History Modal -->
+    <UModal v-model:open="showWeightHistory" :ui="{content: 'max-w-7xl'}">
+      <template #content>
+        <UCard>
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h3 class="text-xl font-medium">Suivi du poids de {{ animal.name }}</h3>
+              <UButton color="gray" variant="ghost" icon="i-lucide-x" @click="showWeightHistory = false" />
+            </div>
+          </template>
+
+          <DWeightHistory
+              :pet-name="animal.name"
+              :current-weight="animal.weight"
+              @update:weight="updateWeight" />
+        </UCard>
+      </template>
+    </UModal>
+  </div>
+  <div v-else>loading</div>
+</template>
+<script lang="ts" setup>
+import DWeightHistory from '~/components/custom/DWeightHistory.vue';
+import DProfileFlea from '~/components/profile/DProfileFlea.vue';
+import DProfileWorm from '~/components/profile/DProfileWorm.vue';
+import DProfileHeader from '~/components/profile/DProfileHeader.vue';
+import DProfileFood from '~/components/profile/DProfileFood.vue';
+import { ref } from 'vue';
+
+const avatar = ref('https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+
+const route = useRoute();
+const animalStore = useAnimalStore();
+const animal = ref<Animal>(null);
+const showWeightHistory = ref(false);
+
+onMounted(() => {
+  animal.value = animalStore.animalByName(route.params.slug.trim());
+  // todo gérer le cas non passant
+})
+
+// Calculate pet age for stats section
+const age = computed(() => {
+  if (!animal.value.birthDate) {
+    return null;
+  }
+
+  const dob = new Date(animal.value.birthDate);
+  const today = new Date();
+  let years = today.getFullYear() - dob.getFullYear();
+  let months = today.getMonth() - dob.getMonth();
+
+  if (months < 0 || (months === 0 && today.getDate() < dob.getDate())) {
+    years--;
+    months = 12 + months + +(months === 0);
+  }
+
+  return { years, months };
+});
+
+const displayAge = computed(() => {
+  if (!age.value) {
+    return "N/A";
+  }
+
+  if (age.value.years === 0) {
+    return `${age.value.months} mois`;
+  }
+
+  return `${age.value.years} an${age.value.years > 1 ? 's' : ''} ${age.value.months} mois`;
+});
+
+const onMealUpdated = (meal) => {
+  animal.value.mealQuantity = Number(meal.value);
+};
+
+const toggleWeightHistory = () => {
+  showWeightHistory.value = !showWeightHistory.value;
+};
+
+const updateWeight = (newWeight) => {
+  animal.value.weight = newWeight;
+};
+</script>
+
+<style scoped>
+/* Optional animation for hover states */
+.transition-all {
+  transition: all 0.3s ease;
+}
+</style>

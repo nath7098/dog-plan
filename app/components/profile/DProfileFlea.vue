@@ -1,8 +1,7 @@
 <template>
   <div>
     <div class="mb-6">
-      <h2 class="text-4xl ">Anti-puces</h2>
-      <p class="font-italic">{{ name }}</p>
+      <h2 class="text-4xl flex align-center gap-2"><UIcon name="i-heroicons-bug-ant" /> Anti-puces</h2>
     </div>
     <DRangeCalendar :start="start" :rangeLength="30" @select:date="onSelectRange" />
   </div>
