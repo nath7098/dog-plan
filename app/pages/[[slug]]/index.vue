@@ -22,12 +22,12 @@
       <div class="space-y-6">
         <!-- Flea Treatment Card -->
         <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-          <DProfileFlea :name="animal.name" />
+          <DProfileFlea :name="animal.name" :start="animal.fleaProtectionStart" @select:start="updateFleaProtection" />
         </div>
 
         <!-- Deworming Card -->
         <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-          <DProfileWorm :name="animal.name" />
+          <DProfileWorm :name="animal.name" :start="animal.wormProtectionStart" @select:start="updateWormProtection" />
         </div>
       </div>
     </div>
@@ -48,7 +48,7 @@
           <div class="text-sm text-blue-600 dark:text-blue-400">Poids actuel</div>
         </div>
         <div class="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800">
-          <div class="text-xl font-medium text-purple-800 dark:text-purple-300">{{ animal.displayAge }}</div>
+          <div class="text-xl font-medium text-purple-800 dark:text-purple-300">{{ displayAge }}</div>
           <div class="text-sm text-purple-600 dark:text-purple-400">Âge</div>
         </div>
       </div>
@@ -79,12 +79,13 @@
           <DWeightHistory
               :pet-name="animal.name"
               :current-weight="animal.weight"
+              :weight-history="animal.weightHistory"
               @update:weight="updateWeight" />
         </UCard>
       </template>
     </UModal>
   </div>
-  <div v-else>loading</div>
+  <div v-else>loading {{ name }}</div>
 </template>
 <script lang="ts" setup>
 import DWeightHistory from '~/components/custom/DWeightHistory.vue';
@@ -93,16 +94,18 @@ import DProfileWorm from '~/components/profile/DProfileWorm.vue';
 import DProfileHeader from '~/components/profile/DProfileHeader.vue';
 import DProfileFood from '~/components/profile/DProfileFood.vue';
 import { ref } from 'vue';
+import type { CalendarDate } from '@internationalized/date';
 
 const avatar = ref('https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
 
 const route = useRoute();
 const animalStore = useAnimalStore();
+const name = computed(() => route.params?.slug?.trim() ?? null);
 const animal = ref<Animal>(null);
 const showWeightHistory = ref(false);
 
 onMounted(() => {
-  animal.value = animalStore.animalByName(route.params.slug.trim());
+  animal.value = animalStore.animalByName(name.value);
   // todo gérer le cas non passant
 })
 
@@ -139,15 +142,28 @@ const displayAge = computed(() => {
 
 const onMealUpdated = (meal) => {
   animal.value.mealQuantity = Number(meal.value);
+  animal.value = animalStore.updateAnimal(animal.value);
 };
 
 const toggleWeightHistory = () => {
   showWeightHistory.value = !showWeightHistory.value;
 };
 
-const updateWeight = (newWeight) => {
-  animal.value.weight = newWeight;
+const updateWeight = (newWeight: Weight) => {
+  animal.value.weight = newWeight.weight;
+  animal.value.weightHistory.push(newWeight);
+  animal.value = animalStore.updateAnimal(animal.value);
 };
+
+const updateFleaProtection = (start: CalendarDate | null) => {
+  animal.value.fleaProtectionStart = start;
+  animal.value = animalStore.updateAnimal(animal.value);
+}
+
+const updateWormProtection = (start: CalendarDate | null) => {
+  animal.value.wormProtectionStart = start;
+  animal.value = animalStore.updateAnimal(animal.value);
+}
 </script>
 
 <style scoped>

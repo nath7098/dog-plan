@@ -12,13 +12,14 @@ import { ref } from 'vue';
 import { CalendarDate } from '@internationalized/date'
 import DRangeCalendar from '~/components/custom/DRangeCalendar.vue';
 
-const props = defineProps(['name', 'weight']);
+const props = defineProps(['name', 'start']);
+const emits = defineEmits(['select:start'])
 
 // Initialize date range state
-const start = ref(new CalendarDate(2025, 2, 27))
+const start = toRef(props.start!);
 
 
 const onSelectRange = (range) => {
-  console.log(range);
+  emits('select:start', range.start!)
 }
 </script>

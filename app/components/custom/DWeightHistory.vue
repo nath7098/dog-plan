@@ -104,6 +104,11 @@ const props = defineProps({
   currentWeight: {
     type: Number,
     required: true
+  },
+  weightHistory: {
+    type: Array<Weight>,
+    required: false,
+    default: []
   }
 });
 
@@ -121,17 +126,7 @@ const tooltipData = ref({ date: new Date(), weight: 0, change: null });
 const tooltipPosition = ref({ left: '0px', top: '0px' });
 
 // Demo data - this would normally come from a store or API
-const weightHistory = ref([
-  { date: new Date('2025-01-05'), weight: 13.2 },
-  { date: new Date('2025-01-29'), weight: 13.8 },
-  { date: new Date('2025-02-15'), weight: 14.2 },
-  { date: new Date('2025-03-07'), weight: 14.5 },
-  { date: new Date('2025-03-22'), weight: 14.8 },
-  { date: new Date('2024-12-01'), weight: 13.0 },
-  { date: new Date('2024-12-15'), weight: 12.8 },
-  { date: new Date('2025-01-12'), weight: 13.4 },
-  { date: new Date('2025-02-01'), weight: 14.0 },
-]);
+const {weightHistory} = toRefs(props)
 
 // Computed
 const weightHistorySorted = computed(() => {
@@ -235,14 +230,14 @@ const addWeight = () => {
   const change = parseFloat((weightValue - lastWeight).toFixed(1));
 
   // Add new weight to history
-  weightHistory.value.push({
-    date: new Date(),
-    weight: weightValue,
-    change: change
-  });
+  // weightHistory.value.push({
+  //   date: new Date(),
+  //   weight: weightValue,
+  //   change: change
+  // });
 
   // Update current weight in parent component
-  emits('update:weight', weightValue);
+  emits('update:weight', {date: new Date(), weight: weightValue});
 
   // Reset and close form
   newWeight.value = '';

@@ -1,3 +1,5 @@
+import type { DateValue } from "@internationalized/date";
+
 declare interface Animal {
     type: 'Dog',
     name: string,
@@ -7,4 +9,7 @@ declare interface Animal {
     mealQuantity?: number,
     avatar?: string,
     weightHistory?: {date: Date, weight: number}[],
+    fleaProtectionStart?: DateValue,
+    wormProtectionStart?: DateValue
 }
+
