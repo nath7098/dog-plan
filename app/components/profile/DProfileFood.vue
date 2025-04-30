@@ -29,38 +29,28 @@
   </div>
 </template>
 <script lang="ts" setup>
-const props = defineProps(['name', 'mealQuantity']);
-const emits = defineEmits(['updateMeal']);
+const props = defineProps(['name', 'mealQuantity', 'food']);
+const emits = defineEmits(['update:meal', 'add:food', 'open:food', 'finish:food']);
 const meal = toRef(props.mealQuantity);
-const foodBags = ref([
-  {
-    brand: 'Wilderness',
-    weight: 12,
-    state: 'open',
-    openDate: new Date('2025-03-28')
-  },
-  {
-    brand: 'Wilderness',
-    weight: 12,
-    state: 'stock',
-  }
-]);
+const foodBags = toRef(props.food);
 
 const currentFoodBag = computed({
   get() {
-    const current = foodBags.value.find(f => f.state === 'open');
+    const current = foodBags.value?.find(f => f.state === 'open');
     if (!current) {
        return;
     }
     return {...current, used: computeFoodBagPercentage(current)}
   },
   set(state: string) {
-    const current = foodBags.value.find(f => f.state === 'open');
-    current!.state = state;
+    const current = foodBags.value?.find(f => f.state === 'open');
+    if (current) {
+      current!.state = state;
+    }
   }
 });
-const stockFoodBags = computed(() => foodBags.value.filter(f => f.state === 'stock'));
-const stockDisplay = computed(() => `${stockFoodBags.value.length} sac${stockFoodBags.value.length > 1 ? 's' : ''} en réserve`);
+const stockFoodBags = computed(() => foodBags.value?.filter(f => f.state === 'stock'));
+const stockDisplay = computed(() => stockFoodBags.value ? `${stockFoodBags.value.length} sac${stockFoodBags.value.length > 1 ? 's' : ''} en réserve` : '');
 
 const computeFoodBagPercentage = (bag) => {
   const daysOpenBag = Math.ceil((new Date().getTime() - bag.openDate.getTime()) / (1000 * 3600 * 24));
@@ -70,7 +60,7 @@ const computeFoodBagPercentage = (bag) => {
 }
 
 const addFoodBag = () => {
-  foodBags.value.push({
+  emits('add:food', {
     brand: 'Wilderness',
     weight: 12,
     state: 'stock',
@@ -78,22 +68,15 @@ const addFoodBag = () => {
 }
 
 const finishFoodBag = () => {
-  currentFoodBag.value = 'empty'
+  emits('finish:food');
 }
 
 const openFoodBag = () => {
-  for(const f of foodBags.value) {
-    if (f.state === 'stock') {
-      f.openDate = new Date();
-      f.state = 'open';
-      return;
-    }
-  }
-  return;
+  emits('open:food');
 }
 
 const updateMealQuantity = () => {
-  emits('updateMeal', meal);
+  emits('update:meal', meal);
 }
 </script>
 

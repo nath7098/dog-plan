@@ -11,6 +11,6 @@ declare interface Animal {
     weightHistory?: Weight[],
     fleaProtection?: {start: string | null, end: string | null},
     wormProtection?: {start: string | null, end: string | null},
-    food?: Food[]
+    food: Food[]
 }
 

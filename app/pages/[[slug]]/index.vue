@@ -17,7 +17,7 @@
     <div class="grid md:grid-cols-2 gap-6 mt-6">
       <!-- Food Management Card -->
       <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-        <DProfileFood :name="animal.name" :meal-quantity="animal.mealQuantity" @update-meal="onMealUpdated" />
+        <DProfileFood :name="animal.name" :food="animal.food" :meal-quantity="animal.mealQuantity" @update:meal="onMealUpdated" @add:food="onAddFood" @open:food="onOpenFood" @finish:food="onFinishFood" />
       </div>
 
       <!-- Health Management Section -->
@@ -142,6 +142,34 @@ const updateFleaProtection = (range: {start: CalendarDate | null, end: CalendarD
 const updateWormProtection = (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
   animal.value.wormProtection = {start: range.start?.toString(), end: range.end?.toString()};
   animal.value = animalStore.updateAnimal(animal.value);
+}
+
+const onAddFood = (food: Food) => {
+  if (!animal.value.food) {
+    animal.value.food = [food];
+  } else {
+    animal.value.food.push(food);
+  }
+  animal.value = animalStore.updateAnimal(animal.value);
+}
+
+const onOpenFood = () => {
+  for (const f of animal.value.food) {
+    if (f.state === 'stock') {
+      f.openDate = new Date();
+      f.state = 'open';
+      animal.value = animalStore.updateAnimal(animal.value);
+      break;
+    }
+  }
+
+}
+
+const onFinishFood = () => {
+  if (animal.value.food.find(f => f.state === 'open')) {
+    animal.value.food.find(f => f.state === 'open').state = 'empty';
+    animal.value = animalStore.updateAnimal(animal.value);
+  }
 }
 </script>
 
