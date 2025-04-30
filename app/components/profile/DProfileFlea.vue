@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { CalendarDate } from '@internationalized/date'
 import DRangeCalendar from '~/components/custom/DRangeCalendar.vue';
 
 const props = defineProps(['name', 'start']);
@@ -20,6 +18,6 @@ const start = toRef(props.start!)
 
 
 const onSelectRange = (range) => {
-  emits('select:start', range.start!);
+  emits('select:start', range);
 }
 </script>

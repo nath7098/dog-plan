@@ -92,9 +92,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, inject, onUnmounted } from 'vue';
 import * as d3 from 'd3';
 import type { TableColumn } from '#ui/components/Table.vue';
+import { CalendarDate, today, getLocalTimeZone, parseDate } from '@internationalized/date';
 
 const props = defineProps({
   petName: {
@@ -122,7 +122,7 @@ const chartContainer = ref(null);
 
 // Tooltip state
 const showTooltip = ref(false);
-const tooltipData = ref({ date: new Date(), weight: 0, change: null });
+const tooltipData = ref({ date: new CalendarDate(), weight: 0, change: null });
 const tooltipPosition = ref({ left: '0px', top: '0px' });
 
 // Demo data - this would normally come from a store or API
@@ -131,7 +131,8 @@ const {weightHistory} = toRefs(props)
 // Computed
 const weightHistorySorted = computed(() => {
   return [...weightHistory.value]
-      .sort((a, b) => a.date.getTime() - b.date.getTime() > 0 ? 1 : -1)
+      .map(v => ({date: parseDate(v.date), weight: v.weight}))
+      .sort((a, b) => a.date.compare(b.date) > 0 ? 1 : -1)
       .map((v, i, arr) => {
         if (i > 0) {
           return {...v, change: v.weight - arr[i - 1].weight}
@@ -156,12 +157,8 @@ const columns: TableColumn<any>[] = [
 ];
 
 // Methods
-const formatDate = (date) => {
-  return new Intl.DateTimeFormat('fr-FR', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  }).format(date);
+const formatDate = (date: CalendarDate) => {
+  return date.toString();
 };
 
 const getChangeClass = (change) => {
@@ -237,7 +234,7 @@ const addWeight = () => {
   // });
 
   // Update current weight in parent component
-  emits('update:weight', {date: new Date(), weight: weightValue});
+  emits('update:weight', {date: today(getLocalTimeZone()).toString(), weight: weightValue});
 
   // Reset and close form
   newWeight.value = '';
@@ -269,7 +266,7 @@ const drawChart = () => {
 
   // Set up scales
   const xScale = d3.scaleTime()
-      .domain(d3.extent(weightHistorySorted.value, d => d.date))
+      .domain(d3.extent(weightHistorySorted.value, d => d.date.toDate()))
       .range([0, width]);
 
   const weightValues = weightHistorySorted.value.map(d => d.weight);
@@ -282,7 +279,7 @@ const drawChart = () => {
 
   // Create the line generator
   const line = d3.line()
-      .x(d => xScale(d.date))
+      .x(d => xScale(d.date.toDate()))
       .y(d => yScale(d.weight))
       .curve(d3.curveMonotoneX);
 
@@ -321,7 +318,7 @@ const drawChart = () => {
       .enter()
       .append("circle")
       .attr("class", "data-point")
-      .attr("cx", d => xScale(d.date))
+      .attr("cx", d => xScale(d.date.toDate()))
       .attr("cy", d => yScale(d.weight))
       .attr("r", 4)
       .attr("fill", "#3b82f6")
@@ -336,7 +333,7 @@ const drawChart = () => {
       .enter()
       .append("circle")
       .attr("class", "hover-area")
-      .attr("cx", d => xScale(d.date))
+      .attr("cx", d => xScale(d.date.toDate()))
       .attr("cy", d => yScale(d.weight))
       .attr("r", 15)
       .attr("fill", "transparent")
@@ -361,7 +358,7 @@ watch(() => props.currentWeight, (newValue) => {
   if (latestRecord.weight !== newValue) {
     // If external update and not the same as our latest, add new record
     weightHistory.value.push({
-      date: new Date(),
+      date: new CalendarDate(),
       weight: newValue,
       change: parseFloat((newValue - latestRecord.weight).toFixed(1))
     });

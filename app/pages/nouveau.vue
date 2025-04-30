@@ -73,20 +73,7 @@
           </UFormField>
 
           <!-- Avatar selection -->
-          <UFormField label="Photo">
-            <div class="grid grid-cols-4 gap-3">
-              <div v-for="(avatar, index) in avatarOptions" :key="index" class="cursor-pointer rounded-lg p-1 border-2"
-                :class="formData.avatar === avatar ? 'border-primary-500' : 'border-transparent hover:border-neutral-200'"
-                @click="formData.avatar = avatar">
-                <UAvatar :src="avatar" size="lg" />
-              </div>
-            </div>
-          </UFormField>
-
-          <!-- Notes -->
-          <UFormField label="Notes">
-            <UTextarea v-model="formData.notes" placeholder="Notes supplémentaires" :rows="3" />
-          </UFormField>
+          <DAvatarSelector :model-value="formData.avatar" :avatars="avatars" @update:model-value="formData.avatar = $event" />
         </div>
       </div>
 
@@ -104,10 +91,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { ageToString, calculAge } from '~/utils/dates';
-import { CalendarDate, DateFormatter, getLocalTimeZone, today, type DateValue } from '@internationalized/date'
+import { CalendarDate, DateFormatter, getLocalTimeZone, today} from '@internationalized/date'
+import DAvatarSelector from '~/components/custom/DAvatarSelector.vue';
 
 const df = new DateFormatter('fr-FR', {
   dateStyle: 'medium'
@@ -116,6 +101,10 @@ const todayDate = ref(today())
 
 const router = useRouter();
 const animalStore = useAnimalStore();
+
+const avatars = ref([
+  'https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+])
 
 // Form data with default values
 const formData = ref({

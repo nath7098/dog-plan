@@ -20,6 +20,6 @@ const start = toRef(props.start!);
 
 
 const onSelectRange = (range) => {
-  emits('select:start', range.start!)
+  emits('select:start', range)
 }
 </script>

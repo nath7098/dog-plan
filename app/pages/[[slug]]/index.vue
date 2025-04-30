@@ -1,6 +1,8 @@
 <template>
   <div v-if="animal" class="p-6 max-w-6xl mx-auto">
     <!-- Profile Header Section with Background -->
+    <UButton variant="link" icon="i-lucide-arrow-left" to="/" />
+
     <div class="rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 p-6 shadow-sm">
       <DProfileHeader
           :avatar="animal.avatar"
@@ -22,12 +24,12 @@
       <div class="space-y-6">
         <!-- Flea Treatment Card -->
         <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-          <DProfileFlea :name="animal.name" :start="animal.fleaProtectionStart" @select:start="updateFleaProtection" />
+          <DProfileFlea :name="animal.name" :start="animal.fleaProtection?.start!" @select:start="updateFleaProtection" />
         </div>
 
         <!-- Deworming Card -->
         <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-          <DProfileWorm :name="animal.name" :start="animal.wormProtectionStart" @select:start="updateWormProtection" />
+          <DProfileWorm :name="animal.name" :start="animal.wormProtection?.start!" @select:start="updateWormProtection" />
         </div>
       </div>
     </div>
@@ -106,38 +108,15 @@ const showWeightHistory = ref(false);
 
 onMounted(() => {
   animal.value = animalStore.animalByName(name.value);
-  // todo gérer le cas non passant
 })
 
 // Calculate pet age for stats section
 const age = computed(() => {
-  if (!animal.value.birthDate) {
-    return null;
-  }
-
-  const dob = new Date(animal.value.birthDate);
-  const today = new Date();
-  let years = today.getFullYear() - dob.getFullYear();
-  let months = today.getMonth() - dob.getMonth();
-
-  if (months < 0 || (months === 0 && today.getDate() < dob.getDate())) {
-    years--;
-    months = 12 + months + +(months === 0);
-  }
-
-  return { years, months };
+  return calculAge(animal.value?.birthDate);
 });
 
 const displayAge = computed(() => {
-  if (!age.value) {
-    return "N/A";
-  }
-
-  if (age.value.years === 0) {
-    return `${age.value.months} mois`;
-  }
-
-  return `${age.value.years} an${age.value.years > 1 ? 's' : ''} ${age.value.months} mois`;
+  return ageToString(age.value);
 });
 
 const onMealUpdated = (meal) => {
@@ -155,13 +134,13 @@ const updateWeight = (newWeight: Weight) => {
   animal.value = animalStore.updateAnimal(animal.value);
 };
 
-const updateFleaProtection = (start: CalendarDate | null) => {
-  animal.value.fleaProtectionStart = start;
+const updateFleaProtection = (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
+  animal.value.fleaProtection = {start: range.start?.toString(), end: range.end?.toString()};
   animal.value = animalStore.updateAnimal(animal.value);
 }
 
-const updateWormProtection = (start: CalendarDate | null) => {
-  animal.value.wormProtectionStart = start;
+const updateWormProtection = (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
+  animal.value.wormProtection = {start: range.start?.toString(), end: range.end?.toString()};
   animal.value = animalStore.updateAnimal(animal.value);
 }
 </script>

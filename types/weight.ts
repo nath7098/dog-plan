@@ -1,4 +1,4 @@
 declare interface Weight {
-    date: Date,
+    date: string,
     weight: number
 }

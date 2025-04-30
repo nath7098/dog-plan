@@ -22,8 +22,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue';
-import { ageToString, calculAge } from '~/utils/dates';
 
 const props = defineProps({
   avatar: String,

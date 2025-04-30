@@ -1,5 +1,4 @@
-
-export const calculAge = (birthDate: Date) => {
+export default function (birthDate: string) {
     if (!birthDate) {
         return;
     }
@@ -15,14 +14,4 @@ export const calculAge = (birthDate: Date) => {
     }
 
     return {years, months};
-};
-
-export const ageToString = (age: {years?: number, months?: number}) => {
-    if (!age) {
-        return;
-    }
-    if (age.years === 0) {
-        return `${age.months} mois`;
-    }
-    return `${age.years} an${age.years > 1 ? 's' : ''} ${age.months} mois`;
-};
+}

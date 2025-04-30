@@ -1,15 +1,16 @@
-import type { DateValue } from "@internationalized/date";
+import type { CalendarDate } from '@internationalized/date';
 
 declare interface Animal {
     type: 'Dog',
     name: string,
-    birthDate: Date,
+    birthDate: string,
     gender: 'male' | 'female',
     weight: number,
     mealQuantity?: number,
     avatar?: string,
-    weightHistory?: {date: Date, weight: number}[],
-    fleaProtectionStart?: DateValue,
-    wormProtectionStart?: DateValue
+    weightHistory?: Weight[],
+    fleaProtection?: {start: string | null, end: string | null},
+    wormProtection?: {start: string | null, end: string | null},
+    food?: Food[]
 }
 
