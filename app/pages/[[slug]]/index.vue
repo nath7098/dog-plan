@@ -17,19 +17,19 @@
     <div class="grid md:grid-cols-2 gap-6 mt-6">
       <!-- Food Management Card -->
       <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-        <DProfileFood :name="animal.name" :food="animal.food" :meal-quantity="animal.mealQuantity" @update:meal="onMealUpdated" @add:food="onAddFood" @open:food="onOpenFood" @finish:food="onFinishFood" />
+        <DProfileFood :name="animal.name" :food="food" :meal-quantity="animal.mealQuantity" @update:meal="onMealUpdated" @add:food="onAddFood" @open:food="onOpenFood" @finish:food="onFinishFood" />
       </div>
 
       <!-- Health Management Section -->
       <div class="space-y-6">
         <!-- Flea Treatment Card -->
         <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-          <DProfileFlea :name="animal.name" :start="animal.fleaProtection?.start!" @select:start="updateFleaProtection" />
+          <DProfileFlea :name="animal.name" :start="toDate(animal.fleaProtection?.start!)" @select:start="updateFleaProtection" />
         </div>
 
         <!-- Deworming Card -->
         <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-          <DProfileWorm :name="animal.name" :start="animal.wormProtection?.start!" @select:start="updateWormProtection" />
+          <DProfileWorm :name="animal.name" :start="toDate(animal.wormProtection?.start!)" @select:start="updateWormProtection" />
         </div>
       </div>
     </div>
@@ -105,6 +105,7 @@ const animalStore = useAnimalStore();
 const name = computed(() => route.params?.slug?.trim() ?? null);
 const animal = ref<Animal>(null);
 const showWeightHistory = ref(false);
+const food = computed(() => animal?.food);
 
 onMounted(() => {
   animal.value = animalStore.animalByName(name.value);
@@ -145,6 +146,7 @@ const updateWormProtection = (range: {start: CalendarDate | null, end: CalendarD
 }
 
 const onAddFood = (food: Food) => {
+  console.log(food)
   if (!animal.value.food) {
     animal.value.food = [food];
   } else {

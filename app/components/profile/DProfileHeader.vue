@@ -8,7 +8,7 @@
         <div v-if="gender" class="text-xl">{{name}} <UIcon :name="gender === 'male' ? 'i-ic-baseline-male' : 'i-ic-baseline-female'" :class="[gender === 'male' ? 'text-blue-500' : 'text-pink-500']" /></div>
         <div>
           <span v-if="displayAge">{{displayAge}}</span>
-          <UButton variant="link" color="neutral" @click="toggleWeightHistory" class="font-medium">
+          <UButton variant="link" color="neutral" @click="toggleWeightHistory" class="font-medium cursor-pointer">
             {{weight}} kg
             <UIcon name="i-lucide-line-chart" class="ml-1" v-if="!showWeightHistory" />
             <UIcon name="i-lucide-x" class="ml-1" v-else />

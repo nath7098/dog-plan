@@ -2,7 +2,7 @@
   <div>
     <div class="mb-6">
       <h2 class="text-4xl ">Nourriture</h2>
-      <p class="font-italic">{{ name }} mange
+      <p v-if="meal" class="font-italic">{{ name }} mange
         <UInput v-model="meal" type="text" variant="ghost" color="neutral" class="relative meal" :style="{width: `${(meal+'').length + 4}ch`}" @change="updateMealQuantity" />
         de croquettes par jour !</p>
     </div>
@@ -20,7 +20,7 @@
         <span class="current-food-text">1 sac de croquettes</span>
         <span class="current-food-finish">Sac terminé !</span>
       </UButton>
-      <UButton v-if="stockFoodBags && stockFoodBags.length" icon="i-lucide-package" variant="outline" color="neutral" :class="['relative overflow-hidden', !currentFoodBag && 'stock-food']" @click="openFoodBag">
+      <UButton v-if="stockFoodBags && stockFoodBags.length" icon="i-lucide-package" variant="outline" color="neutral" :class="['relative overflow-hidden', !currentFoodBag && 'stock-food']" @click="openFoodBag" :disabled="currentFoodBag">
         <span v-if="!currentFoodBag" class="stock-food-progress absolute top-0 left-0 bottom-0 bg-green-500/25 w-0"></span>
         <span class="stock-food-text">{{ stockDisplay }}</span>
         <span v-if="!currentFoodBag" class="stock-food-open">Ouvrir le sac !</span>
@@ -29,54 +29,46 @@
   </div>
 </template>
 <script lang="ts" setup>
-const props = defineProps(['name', 'mealQuantity', 'food']);
-const emits = defineEmits(['update:meal', 'add:food', 'open:food', 'finish:food']);
-const meal = toRef(props.mealQuantity);
-const foodBags = toRef(props.food);
+const props = defineProps(['name']);
+const emits = defineEmits(['update:meal', 'open:food', 'finish:food']);
+const animalStore = useAnimalStore();
+const animal = ref<Animal>(null);
 
-const currentFoodBag = computed({
-  get() {
-    const current = foodBags.value?.find(f => f.state === 'open');
+const meal = ref(null);
+const currentFoodBag = computed(() => {
+  
+    const current = animal.value?.food?.find(f => f.state === 'open');
     if (!current) {
        return;
     }
-    return {...current, used: computeFoodBagPercentage(current)}
-  },
-  set(state: string) {
-    const current = foodBags.value?.find(f => f.state === 'open');
-    if (current) {
-      current!.state = state;
-    }
-  }
+    return {...current, used: foodPercentage(current, animal.value?.mealQuantity)};
 });
-const stockFoodBags = computed(() => foodBags.value?.filter(f => f.state === 'stock'));
+const stockFoodBags = computed(() => animal.value?.food?.filter(f => f.state === 'stock'));
 const stockDisplay = computed(() => stockFoodBags.value ? `${stockFoodBags.value.length} sac${stockFoodBags.value.length > 1 ? 's' : ''} en réserve` : '');
 
-const computeFoodBagPercentage = (bag) => {
-  const daysOpenBag = Math.ceil((new Date().getTime() - bag.openDate.getTime()) / (1000 * 3600 * 24));
-  const quantityUsed = daysOpenBag * props.mealQuantity;
-  const percentage = quantityUsed * 100 / (bag.weight * 1000);
-  return {percentage, display: Math.min(Math.ceil(percentage / 10) * 10, 100)};
-}
+onMounted(() => {
+  animal.value = animalStore.animalByName(props.name);
+  meal.value = animal.value?.mealQuantity!;
+})
 
 const addFoodBag = () => {
-  emits('add:food', {
+  animal.value = animalStore.addFood(props.name, {
     brand: 'Wilderness',
     weight: 12,
     state: 'stock',
-  })
+  });
 }
 
 const finishFoodBag = () => {
-  emits('finish:food');
+  animal.value = animalStore.finishFood(props.name);
 }
 
 const openFoodBag = () => {
-  emits('open:food');
+  animal.value = animalStore.openFood(props.name);
 }
 
 const updateMealQuantity = () => {
-  emits('update:meal', meal);
+  animal.value = animalStore.updateMealQuantity(props.name, meal.value!)
 }
 </script>
 

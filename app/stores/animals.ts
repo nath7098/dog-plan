@@ -1,4 +1,4 @@
-
+import {today, getLocalTimeZone} from '@internationalized/date';
 
 interface State {
     animals: Animal[]
@@ -37,6 +37,13 @@ export const useAnimalStore = defineStore('animals', {
         }
     },
     actions: {
+        getAnimal(name: string) {
+            const animal = this.animals.find((animal) => animal.name.toLowerCase() === name.toLowerCase());
+            if (!animal) {
+                throw Error('Aucun animal trouvé');
+            }
+            return animal;
+        },
         addAnimal(animal: Animal) {
             this.animals.push(animal);
           },
@@ -55,6 +62,39 @@ export const useAnimalStore = defineStore('animals', {
             if (index >= 0 && index < this.animals.length) {
               this.animals.splice(index, 1);
             }
+          },
+          addFood(name: string, food: Food) {
+            const animal = this.getAnimal(name);
+            if (!animal.food) {
+                animal.food = [];
+            }
+            animal.food.push(food);
+            return animal;
+          },
+          openFood(name: string) {
+            const animal = this.getAnimal(name);
+            if (animal.food) {
+                for (const f of animal.food) {
+                    if (f.state === 'stock') {
+                      f.openDate = today(getLocalTimeZone()).toString();
+                      f.state = 'open';
+                      break;
+                    }
+                  }
+            }
+            return animal;
+          },
+          finishFood(name: string) {
+            const animal = this.getAnimal(name);
+            if (animal.food) {
+                animal.food.find(f => f.state === 'open').state = 'empty';
+            }
+            return animal;
+          },
+          updateMealQuantity(name: string, quantity?: number) {
+            const animal = this.getAnimal(name);
+            animal.mealQuantity = quantity;
+            return animal;
           }
     }
 })

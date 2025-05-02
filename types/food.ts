@@ -3,5 +3,5 @@ declare interface Food {
     brand: string,
     weight: number,
     state: 'stock' | 'open' | 'empty',
-    openDate?: Date,
+    openDate?: string,
 }

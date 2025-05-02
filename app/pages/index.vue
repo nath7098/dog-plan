@@ -71,7 +71,7 @@
                   <UBadge
                       v-for="(alerte, idx) in getAnimalAlerts(animal)"
                       :key="`${animal.name}-alert-${idx}`"
-                      :color="alerte.level === 'danger' ? 'error' : (alerte.level === 'warning' ? 'warning' : 'neutral')"
+                      :color="alerte.level === 'danger' ? 'error' : (alerte.level === 'warning' ? 'warning' : 'info')"
                       variant="subtle"
                       class="cursor-help"
                   >
@@ -124,7 +124,7 @@
                     !animal.weight ? 'text-red-500' :
                     isWeightRecent(animal) ? 'text-green-500' : 'text-amber-500'
                   ]" />
-                  <span class="text-xs text-slate-600">Poids à jour</span>
+                  <span class="text-xs text-slate-600">Poids</span>
                 </div>
               </div>
             </div>
@@ -201,7 +201,7 @@ const isWeightRecent = (animal) => {
     const lastWeight = sortedWeightHistory[sortedWeightHistory.length - 1];
 
     if (lastWeight && lastWeight.parsedDate) {
-      return td.add({months: -2}).compare(lastWeight.parsedDate) >= 0;
+      return td.compare(lastWeight.parsedDate) < 60;
     }
   } catch (e) {
     console.error("Error processing weight history:", e);
@@ -256,11 +256,12 @@ const getAnimalAlerts = (animal) => {
       const lastWeight = sortedWeightHistory[sortedWeightHistory.length - 1];
 
       if (lastWeight && lastWeight.parsedDate) {
-        if (animal.weight && td.add({years: -1}).compare(lastWeight.parsedDate) < 0) {
+        const compare = td.compare(lastWeight.parsedDate)
+        if (compare >= 365) {
           alerts.push({level: 'danger', icon: 'i-healthicons-weight-outline', text: `${animal.name} n'a pas de poids renseigné depuis plus de 1 an`});
-        } else if (animal.weight && td.add({months: -6}).compare(lastWeight.parsedDate) < 0) {
+        } else if (compare >= 187) {
           alerts.push({level: 'warning', icon: 'i-healthicons-weight-outline', text: `${animal.name} n'a pas de poids renseigné depuis plus de 6 mois`});
-        } else if (animal.weight && td.add({months: -2}).compare(lastWeight.parsedDate) < 0) {
+        } else if (compare >= 60) {
           alerts.push({level: 'info', icon: 'i-healthicons-weight-outline', text: `${animal.name} n'a pas de poids renseigné depuis plus de 2 mois`});
         }
       }
