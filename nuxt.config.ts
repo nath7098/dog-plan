@@ -7,7 +7,13 @@ export default defineNuxtConfig({
       enabled: true,
     },
   },
-  modules: ['@nuxt/ui', '@nuxt/eslint', 'shadcn-nuxt', '@pinia/nuxt'],
+  modules: [
+    '@nuxt/ui',
+    '@nuxt/eslint',
+    'shadcn-nuxt',
+    '@pinia/nuxt',
+    '@nuxtjs/supabase',
+  ],
   css: ['~/assets/css/main.css'],
   shadcn: {
     prefix: 'D',

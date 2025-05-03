@@ -1,4 +1,5 @@
-declare interface Food {
+export default interface Food {
+    animalId: number,
     type: 'Dog',
     brand: string,
     weight: number,

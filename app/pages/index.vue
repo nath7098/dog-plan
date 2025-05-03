@@ -7,8 +7,30 @@
         <p class="text-slate-500">Gérez vos amis à quatre pattes</p>
       </div>
 
+      <!-- Loading and Error States -->
+      <div v-if="animalStore.loading" class="text-center py-6">
+        <UIcon name="i-heroicons-arrow-path" class="animate-spin text-blue-500 text-2xl" />
+        <p class="mt-2 text-slate-600">Chargement de vos animaux...</p>
+      </div>
+
+      <div v-else-if="animalStore.error" class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-6">
+        <div class="flex items-center">
+          <UIcon name="i-heroicons-exclamation-circle" class="text-red-500 mr-2" />
+          <p>Erreur: {{ animalStore.error }}</p>
+        </div>
+        <UButton 
+          class="mt-2" 
+          size="sm" 
+          color="red" 
+          variant="soft" 
+          @click="initializeStore"
+        >
+          Réessayer
+        </UButton>
+      </div>
+
       <!-- Cards Container with Grid Layout -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- New Pet Card -->
         <UButton variant="ghost" to="nouveau" class="group h-full">
           <div class="bg-white w-full rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full p-6">
@@ -25,7 +47,13 @@
         </UButton>
 
         <!-- Animal Cards -->
-        <UButton v-for="animal in animals" :key="animal.name" :to="animal.name" variant="ghost" class="group h-full">
+        <UButton 
+          v-for="animal in animalStore.animals" 
+          :key="animal.name" 
+          :to="animal.name" 
+          variant="ghost" 
+          class="group h-full"
+        >
           <div class="bg-white w-full rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full">
             <div class="relative">
               <!-- Banner Background - Dog/Cat/Pet themed background -->
@@ -138,6 +166,10 @@
 <script lang="ts" setup>
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
 
+definePageMeta({
+  middleware: 'auth'
+})
+
 type AnimalInfo = {
   level: 'info' | 'warning' | 'danger';
   icon?: string;
@@ -145,7 +177,20 @@ type AnimalInfo = {
 }
 
 const animalStore = useAnimalStore();
-const animals = ref(animalStore.animals);
+
+// Initialize the store
+async function initializeStore() {
+  try {
+    await animalStore.fetchAnimals();
+  } catch (error) {
+    console.error('Failed to initialize animal store:', error);
+  }
+}
+
+// Call initialization on component mount
+onMounted(() => {
+  initializeStore();
+});
 
 const age = (bd) => {
   return calculAge(bd);
@@ -174,7 +219,7 @@ const getFoodStatus = (animal) => {
   const stockFood = animal.food.find(f => f.state === 'stock');
   const openFood = animal.food.find(f => f.state === 'open');
 
-  if (!foodPercentage(stockFood) && foodPercentage(openFood)?.percentage >= 70) {
+  if (!stockFood && openFood && foodPercentage(openFood)?.percentage >= 70) {
     return 'low';
   }
 
@@ -227,9 +272,9 @@ const getAnimalAlerts = (animal) => {
     const stockFood = animal.food.find(f => f.state === 'stock');
     const openFood = animal.food.find(f => f.state === 'open');
 
-    if (!foodPercentage(stockFood) && foodPercentage(openFood)?.percentage >= 90) {
+    if (!stockFood && openFood && foodPercentage(openFood)?.percentage >= 90) {
       alerts.push({level: 'warning', icon: 'i-tabler-dog-bowl', text: `${animal.name} n'a bientôt plus de croquettes`});
-    } else if (!foodPercentage(stockFood) && foodPercentage(openFood)?.percentage >= 70 && foodPercentage(openFood)?.percentage < 90) {
+    } else if (!stockFood && openFood && foodPercentage(openFood)?.percentage >= 70 && foodPercentage(openFood)?.percentage < 90) {
       alerts.push({level: 'info', icon: 'i-tabler-dog-bowl', text: `Pensez a prévoire des croquettes pour ${animal.name}`});
     }
   }

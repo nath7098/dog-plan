@@ -1,6 +1,8 @@
-import type { CalendarDate } from '@internationalized/date';
+import type Weight from './weight';
+import type Food from './food';
 
-declare interface Animal {
+export default interface Animal {
+    id: number,
     type: 'Dog',
     name: string,
     birthDate: string,
@@ -9,8 +11,8 @@ declare interface Animal {
     mealQuantity?: number,
     avatar?: string,
     weightHistory?: Weight[],
-    fleaProtection?: {start: string | null, end: string | null},
-    wormProtection?: {start: string | null, end: string | null},
+    fleaProtection?: {animalId: number, start: string | null, end: string | null},
+    wormProtection?: {animalId: number, start: string | null, end: string | null},
     food: Food[]
 }
 

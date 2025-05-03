@@ -1,4 +1,5 @@
-declare interface Weight {
+export default interface Weight {
+    animalId: number,
     date: string,
     weight: number
 }

@@ -94,6 +94,8 @@
 import { CalendarDate, DateFormatter, getLocalTimeZone, today} from '@internationalized/date'
 import DAvatarSelector from '~/components/custom/DAvatarSelector.vue';
 
+const client = useSupabaseClient();
+const user = useSupabaseUser();
 const df = new DateFormatter('fr-FR', {
   dateStyle: 'medium'
 });
@@ -111,48 +113,38 @@ const formData = ref({
   name: '',
   birthDate: null as CalendarDate,
   gender: null,
-  type: 'dog',
+  type: 'Dog',
   weight: null,
   mealQuantity: null,
-  avatar: '/img/pets/dog1.jpg',
-  notes: ''
+  avatar: '',
 });
 
 // Pet type options
 const petTypes = [
-  { value: 'dog', label: 'Chien', icon: 'i-fluent-animal-dog-16-regular' },
+  { value: 'Dog', label: 'Chien', icon: 'i-fluent-animal-dog-16-regular' },
   // { value: 'cat', label: 'Chat', icon: 'i-fluent-animal-cat-20-regular' },
   // { value: 'rabbit', label: 'Lapin', icon: 'i-noto-rabbit' },
   // { value: 'bird', label: 'Oiseau', icon: 'i-noto-bird' },
-];
-
-// Avatar options - placeholder paths
-const avatarOptions = [
-  '/img/pets/dog1.jpg',
-  '/img/pets/dog2.jpg',
-  '/img/pets/cat1.jpg',
-  '/img/pets/cat2.jpg',
 ];
 
 // Calculate and format age based on birth date
 const displayedAge = computed(() => {
   if (!formData.value || !formData.value.birthDate) return '';
 
-  const age = calculAge(formData.value.birthDate.toDate(getLocalTimeZone()));
+  const age = calculAge(formData.value.birthDate.toString());
   return ageToString(age!);
 });
 
 // Save pet to store and navigate to home
-const savePet = () => {
+const savePet = async () => {
   // Validate required fields
   if (!formData.value.name || !formData.value.birthDate) {
     return;
   }
-
-  // Add pet to store
-  animalStore.addAnimal({
+  // Add pet to store and persist
+  await animalStore.addAnimal({
     name: formData.value.name,
-    birthDate: formData.value.birthDate.toDate(getLocalTimeZone()),
+    birthDate: formData.value.birthDate.toString(),
     gender: formData.value.gender,
     type: formData.value.type,
     weight: formData.value.weight,
