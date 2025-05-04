@@ -60,10 +60,8 @@
     <div class="mt-6 rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800">
       <h2 class="text-2xl mb-4 font-medium">Actions rapides</h2>
       <div class="flex flex-wrap gap-3">
-        <UButton icon="i-lucide-package-plus" color="green">Nouveau sac</UButton>
-        <UButton icon="i-lucide-calendar" color="blue">Prochain RDV véto</UButton>
-        <UButton icon="i-lucide-activity" color="amber" @click="toggleWeightHistory">Ajouter un poids</UButton>
-        <UButton icon="i-lucide-medal" color="purple">Ajouter un événement</UButton>
+        <UButton icon="i-lucide-activity" variant="ghost" color="warning" @click="toggleWeightHistory">Ajouter un poids</UButton>
+        <UButton icon="i-lucide-trash-2" variant="ghost" color="error" @click="onDeleteAnimal">Supprimer</UButton>
       </div>
     </div>
 
@@ -138,6 +136,11 @@ const updateFleaProtection = async (range: {start: CalendarDate | null, end: Cal
 const updateWormProtection = async (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
   animal.value = await animalStore.updateWormProtection({animalId: animal.value.id, start: range.start?.toString(), end: range.end?.toString()});
 
+}
+
+const onDeleteAnimal = async () => {
+  await animalStore.removeAnimal(animal.value.id);
+  navigateTo('/');
 }
 </script>
 
