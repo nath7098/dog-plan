@@ -17,7 +17,7 @@
             'bg-amber-500/25' : currentFoodBag.used.percentage >= 75 && currentFoodBag.used.percentage < 90,
             'bg-red-500/25': currentFoodBag.used.percentage >= 90}]"
         :style="{width: `${currentFoodBag.used.display}%`}"></span>
-        <span class="current-food-text">1 sac de croquettes</span>
+        <span class="current-food-text">{{ currentFoodBag.brand }} - {{ currentFoodBag.weight }} kg</span>
         <span class="current-food-finish">Sac terminé !</span>
       </UButton>
       <UButton v-if="stockFoodBags && stockFoodBags.length" icon="i-lucide-package" variant="outline" color="neutral" :class="['relative overflow-hidden', !currentFoodBag && 'stock-food']" @click="openFoodBag" :disabled="currentFoodBag">
@@ -29,6 +29,8 @@
   </div>
 </template>
 <script lang="ts" setup>
+import type Animal from '~~/types/animal';
+
 const props = defineProps(['name']);
 const emits = defineEmits(['update:meal', 'open:food', 'finish:food']);
 const animalStore = useAnimalStore();
@@ -47,28 +49,30 @@ const stockFoodBags = computed(() => animal.value?.food?.filter(f => f.state ===
 const stockDisplay = computed(() => stockFoodBags.value ? `${stockFoodBags.value.length} sac${stockFoodBags.value.length > 1 ? 's' : ''} en réserve` : '');
 
 onMounted(() => {
-  animal.value = animalStore.animalByName(props.name);
+  animal.value = animalStore.animalByName(props.name)!;
   meal.value = animal.value?.mealQuantity!;
 })
 
-const addFoodBag = () => {
-  animal.value = animalStore.addFood(props.name, {
+const addFoodBag = async () => {
+  animal.value = await animalStore.addFood({
+    animalId: animal.value.id,
+    type: 'Dog',
     brand: 'Wilderness',
     weight: 12,
     state: 'stock',
-  });
+  })!;
 }
 
-const finishFoodBag = () => {
-  animal.value = animalStore.finishFood(props.name);
+const finishFoodBag = async () => {
+  animal.value = await animalStore.finishFood(animal.value.id);
 }
 
-const openFoodBag = () => {
-  animal.value = animalStore.openFood(props.name);
+const openFoodBag = async () => {
+  animal.value = await animalStore.openFood(animal.value.id);
 }
 
-const updateMealQuantity = () => {
-  animal.value = animalStore.updateMealQuantity(props.name, meal.value!)
+const updateMealQuantity = async () => {
+  animal.value = await animalStore.updateAnimal(animal.value.id, {mealQuantity: Number(meal.value!)});
 }
 </script>
 

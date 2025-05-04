@@ -39,10 +39,10 @@ export const useAnimalStore = defineStore('animals', {
           .from('animal')
           .select(`
             id, name, type, birthDate, gender, weight, mealQuantity, avatar,
-            weightHistory (id, weight, date),
-            fleaProtection (id, start, end),
-            wormProtection (id, start, end),
-            food (id, type, brand, weight, state, openDate)
+            weightHistory (id, animalId, weight, date),
+            fleaProtection (animalId, start, end),
+            wormProtection (animalId, start, end),
+            food (id, animalId, type, brand, weight, state, openDate)
           `)
           .eq('userId', user.id);
 
@@ -70,25 +70,24 @@ export const useAnimalStore = defineStore('animals', {
       }
       return animal;
     },
-
     getAnimalById(id: number) {
       const animal = this.animals.find((animal) => animal.id === id);
       if (!animal) {
-        throw new Error('No animal found');
+        throw new Error('No animal found for id ' + id);
       }
       return animal;
     },
-
     async addAnimal(animal: Animal) {
       try {
         this.loading = true;
         this.error = null;
 
         const client = useSupabaseClient();
-        const user = useState('user').value;
+        const user = useSupabaseUser().value;
 
         if (!user || !user.id) {
           this.error = 'User not authenticated';
+          console.error(this.error);
           return null;
         }
 
@@ -115,9 +114,9 @@ export const useAnimalStore = defineStore('animals', {
 
         if (animalData && animal.weight) {
           const { error: weightError } = await client
-            .from('weight_history')
+            .from('weightHistory')
             .insert({
-              animal_id: animalData.id,
+              animalId: animalData.id,
               weight: animal.weight,
               date: today(getLocalTimeZone()).toString()
             });
@@ -238,9 +237,9 @@ export const useAnimalStore = defineStore('animals', {
           return false;
         }
         await this.fetchAnimals();
-        return this.getAnimalById(animalId);
+        return this.getAnimalById(protection.animalId);
       } catch (err) {
-        console.error('Error in add flea protection history:', err);
+        console.error('Error in add flea protection :', err);
         this.error = err instanceof Error ? err.message : 'Unknown error';
         return false;
       } finally {
@@ -261,9 +260,9 @@ export const useAnimalStore = defineStore('animals', {
           return false;
         }
         await this.fetchAnimals();
-        return this.getAnimalById(animalId);
+        return this.getAnimalById(protection.animalId);
       } catch (err) {
-        console.error('Error in add worm protection history:', err);
+        console.error('Error in add worm protection:', err);
         this.error = err instanceof Error ? err.message : 'Unknown error';
         return false;
       } finally {
@@ -286,7 +285,7 @@ export const useAnimalStore = defineStore('animals', {
         await this.fetchAnimals();
         return this.getAnimalById(food.animalId);
       } catch (err) {
-        console.error('Error in add worm protection history:', err);
+        console.error('Error in add food:', err);
         this.error = err instanceof Error ? err.message : 'Unknown error';
         return false;
       } finally {
@@ -320,7 +319,7 @@ export const useAnimalStore = defineStore('animals', {
           const { error } = await client.from('food').update(foodToOpen).eq('id', foodToOpen.id);
 
           if (error) {
-            console.error('Error adding food to animal:', error);
+            console.error('Error opening food :', error);
             this.error = error.message;
             return false;
           }
@@ -329,7 +328,7 @@ export const useAnimalStore = defineStore('animals', {
 
         return this.getAnimalById(animalId);
       } catch (err) {
-        console.error('Error in add worm protection history:', err);
+        console.error('Error in open food :', err);
         this.error = err instanceof Error ? err.message : 'Unknown error';
         return false;
       } finally {
@@ -357,7 +356,7 @@ export const useAnimalStore = defineStore('animals', {
           const { error } = await client.from('food').update(foodToFinish).eq('id', foodToFinish.id);
 
           if (error) {
-            console.error('Error adding food to animal:', error);
+            console.error('Error finishing food :', error);
             this.error = error.message;
             return false;
           }
@@ -366,7 +365,7 @@ export const useAnimalStore = defineStore('animals', {
 
         return this.getAnimalById(animalId);
       } catch (err) {
-        console.error('Error in add worm protection history:', err);
+        console.error('Error in finish food :', err);
         this.error = err instanceof Error ? err.message : 'Unknown error';
         return false;
       } finally {

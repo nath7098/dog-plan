@@ -17,7 +17,7 @@
     <div class="grid md:grid-cols-2 gap-6 mt-6">
       <!-- Food Management Card -->
       <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
-        <DProfileFood :name="animal.name" :food="food" :meal-quantity="animal.mealQuantity" @update:meal="onMealUpdated" @add:food="onAddFood" @open:food="onOpenFood" @finish:food="onFinishFood" />
+        <DProfileFood :name="animal.name" :food="food" :meal-quantity="animal.mealQuantity" />
       </div>
 
       <!-- Health Management Section -->
@@ -62,7 +62,7 @@
       <div class="flex flex-wrap gap-3">
         <UButton icon="i-lucide-package-plus" color="green">Nouveau sac</UButton>
         <UButton icon="i-lucide-calendar" color="blue">Prochain RDV véto</UButton>
-        <UButton icon="i-lucide-activity" color="amber" @click="openWeightHistory">Ajouter un poids</UButton>
+        <UButton icon="i-lucide-activity" color="amber" @click="toggleWeightHistory">Ajouter un poids</UButton>
         <UButton icon="i-lucide-medal" color="purple">Ajouter un événement</UButton>
       </div>
     </div>
@@ -98,6 +98,7 @@ import DProfileFood from '~/components/profile/DProfileFood.vue';
 import { ref } from 'vue';
 import type { CalendarDate } from '@internationalized/date';
 import type Food from '~~/types/food';
+import type Weight from '~~/types/weight';
 
 const route = useRoute();
 const animalStore = useAnimalStore();
@@ -108,6 +109,9 @@ const food = computed(() => animal?.food);
 
 onMounted(() => {
   animal.value = animalStore.animalByName(name.value);
+  if (!animal.value) {
+    navigateTo('/')
+  }
 })
 
 // Calculate pet age for stats section
@@ -118,10 +122,6 @@ const age = computed(() => {
 const displayAge = computed(() => {
   return ageToString(age.value!);
 });
-
-const onMealUpdated = (meal) => {
-  animal.value = animalStore.updateAnimal(animal.value.id, {mealQuantity: Number(meal.value)});
-};
 
 const toggleWeightHistory = () => {
   showWeightHistory.value = !showWeightHistory.value;
@@ -138,18 +138,6 @@ const updateFleaProtection = async (range: {start: CalendarDate | null, end: Cal
 const updateWormProtection = async (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
   animal.value = await animalStore.updateWormProtection({animalId: animal.value.id, start: range.start?.toString(), end: range.end?.toString()});
 
-}
-
-const onAddFood = async (food: Food) => {
-  animal.value = await animalStore.addFood(food);
-}
-
-const onOpenFood = async () => {
-  animal.value = await animalStore.openFood(animal.value.id);
-}
-
-const onFinishFood = async () => {
-  animal.value = await animalStore.finishFood(animal.value.id);
 }
 </script>
 

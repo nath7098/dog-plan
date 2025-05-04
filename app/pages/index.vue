@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-8">
+  <div class="min-h-screen light:bg-gradient-to-br light:from-slate-50 light:to-blue-50 p-8">
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <div class="mb-8 text-center">
-        <h1 class="text-3xl font-bold text-slate-800 mb-2">Mes Compagnons</h1>
-        <p class="text-slate-500">Gérez vos amis à quatre pattes</p>
+        <h1 class="text-3xl font-bold dark:text-neutral-50 text-neutral-800 mb-2">Mes Compagnons</h1>
+        <p class="dark:text-neutral-400 text-neutral-500">Gérez vos amis à quatre pattes</p>
       </div>
 
       <!-- Loading and Error States -->
@@ -33,14 +33,14 @@
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- New Pet Card -->
         <UButton variant="ghost" to="nouveau" class="group h-full">
-          <div class="bg-white w-full rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full p-6">
+          <div class="bg-neutral-300 dark:bg-neutral-800 w-full rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-700 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full p-6">
             <div class="flex items-center gap-6">
-              <div class="bg-blue-50 rounded-full p-6 group-hover:bg-blue-100 transition-colors">
+              <div class="bg-blue-50/20 rounded-full p-6 group-hover:bg-blue-100 transition-colors">
                 <UIcon name="i-heroicons-plus" class="text-blue-500 text-3xl" />
               </div>
               <div>
-                <h3 class="text-xl font-medium text-slate-700">Ajouter un animal</h3>
-                <p class="text-slate-500 text-sm">Enregistrer un nouveau compagnon</p>
+                <h3 class="text-xl font-medium dark:text-neutral-200 text-neutral-700">Ajouter un animal</h3>
+                <p class="dark:text-neutral-400 text-neutral-500 text-sm">Enregistrer un nouveau compagnon</p>
               </div>
             </div>
           </div>
@@ -54,10 +54,10 @@
           variant="ghost" 
           class="group h-full"
         >
-          <div class="bg-white w-full rounded-2xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full">
+          <div class="bg-neutral-300 dark:bg-neutral-800 w-full rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-700 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full">
             <div class="relative">
               <!-- Banner Background - Dog/Cat/Pet themed background -->
-              <div class="h-24 bg-gradient-to-r from-blue-200 to-indigo-100"></div>
+              <div class="h-24 bg-gradient-to-r from-blue-200/20 to-indigo-100/20"></div>
 
               <!-- Avatar, positioned to overlay the banner -->
               <div class="absolute -bottom-10 left-6">
@@ -65,8 +65,8 @@
                     :src="animal.avatar"
                     icon="i-fluent-animal-dog-16-regular"
                     :alt="animal.name"
-                    size="2xl"
-                    class="ring-4 ring-white shadow-md"
+                    size="3xl"
+                    class="ring-3 ring-neutral-200 dark:ring-neutral-300 shadow-md"
                 />
               </div>
             </div>
@@ -76,19 +76,19 @@
               <div class="flex justify-between items-start">
                 <div>
                   <div class="flex items-center gap-2">
-                    <h3 class="text-xl font-medium text-slate-800">{{ animal.name }}</h3>
+                    <h3 class="text-xl font-medium text-neutral-800 dark:text-neutral-100">{{ animal.name }}</h3>
                     <UIcon
                         :name="animal.gender === 'male' ? 'i-ic-baseline-male' : 'i-ic-baseline-female'"
                         :class="[animal.gender === 'male' ? 'text-blue-500' : 'text-pink-500']"
                     />
                   </div>
-                  <div class="text-slate-500 mt-1 flex items-center gap-4">
+                  <div class="text-neutral-500 dark:text-neutral-400 mt-1 flex items-center gap-4">
                     <span class="flex items-center">
-                      <UIcon name="i-heroicons-calendar" class="mr-1 text-slate-400" size="sm" />
+                      <UIcon name="i-heroicons-calendar" class="mr-1 text-neutral-400 dark:text-neutral-200" size="sm" />
                       {{ displayAge(age(animal.birthDate)) }}
                     </span>
                     <span class="flex items-center">
-                      <UIcon name="i-heroicons-scale" class="mr-1 text-slate-400" size="sm" />
+                      <UIcon name="i-heroicons-scale" class="mr-1 text-neutral-400 dark:text-neutral-200" size="sm" />
                       {{ animal.weight }} kg
                     </span>
                   </div>
@@ -120,39 +120,39 @@
               <!-- Health Status Indicators -->
               <div class="mt-4 grid grid-cols-2 gap-2">
                 <!-- Flea Protection -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
                   <UIcon name="i-heroicons-bug-ant" size="sm" :class="[
                     !animal.fleaProtection || !animal.fleaProtection.end ||
                     isProtectionExpired(animal.fleaProtection) ? 'text-red-500' : 'text-green-500'
                   ]" />
-                  <span class="text-xs text-slate-600">Protection anti-puces</span>
+                  <span class="text-xs text-neutral-600 dark:text-neutral-400">Protection anti-puces</span>
                 </div>
 
                 <!-- Worm Protection -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
                   <UIcon name="i-fluent-emoji-high-contrast-worm" size="sm" :class="[
                     !animal.wormProtection || !animal.wormProtection.end ||
                     isProtectionExpired(animal.wormProtection) ? 'text-red-500' : 'text-green-500'
                   ]" />
-                  <span class="text-xs text-slate-600">Vermifuge</span>
+                  <span class="text-xs text-neutral-600 dark:text-neutral-400">Vermifuge</span>
                 </div>
 
                 <!-- Food Status -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
                   <UIcon name="i-tabler-dog-bowl" size="sm" :class="[
                     !animal.food?.length ? 'text-red-500' :
                     getFoodStatus(animal) === 'low' ? 'text-amber-500' : 'text-green-500'
                   ]" />
-                  <span class="text-xs text-slate-600">Nourriture</span>
+                  <span class="text-xs text-neutral-600 dark:text-neutral-400">Nourriture</span>
                 </div>
 
                 <!-- Weight Status -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
                   <UIcon name="i-healthicons-weight-outline" size="sm" :class="[
                     !animal.weight ? 'text-red-500' :
                     isWeightRecent(animal) ? 'text-green-500' : 'text-amber-500'
                   ]" />
-                  <span class="text-xs text-slate-600">Poids</span>
+                  <span class="text-xs text-neutral-600 dark:text-neutral-400">Poids</span>
                 </div>
               </div>
             </div>
