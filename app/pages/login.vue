@@ -72,12 +72,13 @@
   
   <script setup lang="ts">
   const client = useSupabaseClient();
+  const config = useRuntimeConfig();
   
   const login = async () => {
     const response = await client.auth.signInWithOAuth({
       provider: 'google', 
       options: {
-        redirectTo: `${useRequestURL().host}/confirm`
+        redirectTo: `${config.public.url}/confirm`
       }
     });
   }
