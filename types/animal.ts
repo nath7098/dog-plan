@@ -1,5 +1,6 @@
 import type Weight from './weight';
 import type Food from './food';
+import type Protection from './protection';
 
 export default interface Animal {
     id: number,
@@ -11,8 +12,8 @@ export default interface Animal {
     mealQuantity?: number,
     avatar?: string,
     weightHistory?: Weight[],
-    fleaProtection?: {animalId: number, start: string | null, end: string | null},
-    wormProtection?: {animalId: number, start: string | null, end: string | null},
+    fleaProtection?: Protection,
+    wormProtection?: Protection,
     food: Food[]
 }
 

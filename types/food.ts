@@ -1,4 +1,5 @@
 export default interface Food {
+    id: number,
     animalId: number,
     type: 'Dog',
     brand: string,

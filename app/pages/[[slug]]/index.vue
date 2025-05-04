@@ -97,8 +97,7 @@ import DProfileHeader from '~/components/profile/DProfileHeader.vue';
 import DProfileFood from '~/components/profile/DProfileFood.vue';
 import { ref } from 'vue';
 import type { CalendarDate } from '@internationalized/date';
-
-const avatar = ref('https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+import type Food from '~~/types/food';
 
 const route = useRoute();
 const animalStore = useAnimalStore();
@@ -117,61 +116,40 @@ const age = computed(() => {
 });
 
 const displayAge = computed(() => {
-  return ageToString(age.value);
+  return ageToString(age.value!);
 });
 
 const onMealUpdated = (meal) => {
-  animal.value.mealQuantity = Number(meal.value);
-  animal.value = animalStore.updateAnimal(animal.value);
+  animal.value = animalStore.updateAnimal(animal.value.id, {mealQuantity: Number(meal.value)});
 };
 
 const toggleWeightHistory = () => {
   showWeightHistory.value = !showWeightHistory.value;
 };
 
-const updateWeight = (newWeight: Weight) => {
-  animal.value.weight = newWeight.weight;
-  animal.value.weightHistory.push(newWeight);
-  animal.value = animalStore.updateAnimal(animal.value);
+const updateWeight = async (newWeight: Weight) => {
+  animal.value = await animalStore.addWeightHistory(animal.value.id, newWeight);
 };
 
-const updateFleaProtection = (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
-  animal.value.fleaProtection = {start: range.start?.toString(), end: range.end?.toString()};
-  animal.value = animalStore.updateAnimal(animal.value);
+const updateFleaProtection = async (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
+  animal.value = await animalStore.updateFleaProtection({animalId: animal.value.id, start: range.start?.toString(), end: range.end?.toString()});
 }
 
-const updateWormProtection = (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
-  animal.value.wormProtection = {start: range.start?.toString(), end: range.end?.toString()};
-  animal.value = animalStore.updateAnimal(animal.value);
-}
-
-const onAddFood = (food: Food) => {
-  console.log(food)
-  if (!animal.value.food) {
-    animal.value.food = [food];
-  } else {
-    animal.value.food.push(food);
-  }
-  animal.value = animalStore.updateAnimal(animal.value);
-}
-
-const onOpenFood = () => {
-  for (const f of animal.value.food) {
-    if (f.state === 'stock') {
-      f.openDate = new Date();
-      f.state = 'open';
-      animal.value = animalStore.updateAnimal(animal.value);
-      break;
-    }
-  }
+const updateWormProtection = async (range: {start: CalendarDate | null, end: CalendarDate | null}) => {
+  animal.value = await animalStore.updateWormProtection({animalId: animal.value.id, start: range.start?.toString(), end: range.end?.toString()});
 
 }
 
-const onFinishFood = () => {
-  if (animal.value.food.find(f => f.state === 'open')) {
-    animal.value.food.find(f => f.state === 'open').state = 'empty';
-    animal.value = animalStore.updateAnimal(animal.value);
-  }
+const onAddFood = async (food: Food) => {
+  animal.value = await animalStore.addFood(food);
+}
+
+const onOpenFood = async () => {
+  animal.value = await animalStore.openFood(animal.value.id);
+}
+
+const onFinishFood = async () => {
+  animal.value = await animalStore.finishFood(animal.value.id);
 }
 </script>
 
