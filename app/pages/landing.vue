@@ -1,540 +1,531 @@
+
 <template>
-  <div class="min-h-screen light:bg-gradient-to-br light:from-slate-50 light:to-blue-50">
-    <!-- Navigation -->
-    <UContainer class="py-4">
-      <nav class="flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <UIcon name="i-fluent-animal-dog-16-regular" class="text-blue-500 text-3xl" />
-          <h1 class="text-2xl font-bold text-blue-600 dark:text-blue-400">Dog Plan</h1>
+  <div class="min-h-screen dark:bg-gradient-to-br dark:from-gray-900 dark:to-blue-950 light:bg-gradient-to-br light:from-blue-50 light:to-indigo-50 transition-colors duration-300">
+    <!-- Formes décoratives -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+      <div class="absolute top-10 left-10 w-64 h-64 bg-amber-200 dark:bg-amber-700 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-3xl opacity-20 animate-blob"></div>
+      <div class="absolute top-40 right-10 w-72 h-72 bg-blue-200 dark:bg-blue-700 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+      <div class="absolute bottom-10 left-1/3 w-80 h-80 bg-purple-200 dark:bg-purple-700 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Contenu principal -->
+    <div class="container mx-auto px-4 py-12 relative z-10">
+      <!-- Navigation -->
+      <nav class="flex justify-between items-center mb-16">
+        <div class="flex items-center gap-3">
+          <div class="bg-white dark:bg-gray-800 p-3 rounded-full shadow-md">
+            <UIcon name="i-tabler-paw" class="h-8 w-8 text-amber-500 dark:text-amber-400" />
+          </div>
+          <span class="text-2xl font-bold text-gray-900 dark:text-white">PawData</span>
         </div>
-        <div class="flex gap-4">
-          <UButton to="/login" variant="ghost" color="gray">Se connecter</UButton>
-          <UButton to="/register" color="primary">S'inscrire</UButton>
+        <div class="flex items-center gap-4">
+          <UButton
+              to="/login"
+              variant="ghost"
+              color="gray"
+              class="hidden md:flex items-center gap-1"
+          >
+            <UIcon name="i-lucide-log-in" class="h-4 w-4" />
+            Connexion
+          </UButton>
+          <UButton
+              to="/login"
+              color="primary"
+              class="bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-500 dark:to-amber-600 text-white"
+          >
+            Commencer maintenant
+          </UButton>
         </div>
       </nav>
-    </UContainer>
 
-    <!-- Hero Section -->
-    <div class="py-16 md:py-24 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30">
-      <UContainer>
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <UBadge color="blue" variant="subtle" class="mb-4">La santé de votre chien simplement</UBadge>
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
-              Suivez, planifiez et aimez mieux
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-700 dark:text-gray-300 mb-6">
-              Dog Plan, votre carnet de santé numérique pour animaux
-            </p>
-            <p class="text-gray-600 dark:text-gray-400 mb-8">
-              Un tableau de bord intelligent pour surveiller le poids, l'alimentation, les traitements antiparasitaires, et plus.
-              Pensé pour les maîtres exigeants.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4">
-              <UButton
-                  color="primary"
-                  size="xl"
-                  icon="i-heroicons-lock-closed"
-                  to="/login">
-                Se connecter avec Google
-              </UButton>
-              <UButton
-                  variant="outline"
-                  size="xl"
-                  to="/demo">
-                Essayer une démo
-              </UButton>
-            </div>
-          </div>
-          <div class="relative hidden md:block">
-            <div class="absolute -left-6 -top-6 w-24 h-24 bg-yellow-200 rounded-full opacity-30"></div>
-            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-blue-200 rounded-full opacity-40"></div>
-
-            <!-- App Dashboard Preview -->
-            <div class="rounded-2xl shadow-2xl bg-white dark:bg-neutral-800 overflow-hidden relative z-10">
-              <!-- Mock Dashboard Header -->
-              <div class="bg-blue-500 dark:bg-blue-600 p-6 text-white">
-                <div class="flex items-center gap-3">
-                  <UAvatar
-                      src="https://images.unsplash.com/photo-1543466835-00a7907e9de1"
-                      alt="Dog avatar"
-                      size="lg"
-                  />
-                  <div>
-                    <h3 class="font-bold">Max</h3>
-                    <p class="text-sm text-blue-100">Labrador • 3 ans</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Mock Dashboard Content -->
-              <div class="p-6">
-                <!-- Weight Chart Mock -->
-                <div class="mb-6">
-                  <h4 class="font-medium mb-2">Suivi du poids</h4>
-                  <div class="h-32 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-end p-2">
-                    <div class="w-1/6 h-1/3 bg-blue-300 dark:bg-blue-700 rounded-t-sm mx-1"></div>
-                    <div class="w-1/6 h-2/5 bg-blue-300 dark:bg-blue-700 rounded-t-sm mx-1"></div>
-                    <div class="w-1/6 h-1/2 bg-blue-300 dark:bg-blue-700 rounded-t-sm mx-1"></div>
-                    <div class="w-1/6 h-3/5 bg-blue-300 dark:bg-blue-700 rounded-t-sm mx-1"></div>
-                    <div class="w-1/6 h-2/3 bg-blue-300 dark:bg-blue-700 rounded-t-sm mx-1"></div>
-                    <div class="w-1/6 h-3/4 bg-blue-400 dark:bg-blue-600 rounded-t-sm mx-1"></div>
-                  </div>
-                </div>
-
-                <!-- Status Cards -->
-                <div class="grid grid-cols-2 gap-3">
-                  <div class="p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800">
-                    <div class="flex gap-2 items-center">
-                      <UIcon name="i-heroicons-shield-check" class="text-green-500" />
-                      <span class="text-sm text-green-700 dark:text-green-300">Anti-puces à jour</span>
-                    </div>
-                  </div>
-                  <div class="p-3 rounded-lg bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800">
-                    <div class="flex gap-2 items-center">
-                      <UIcon name="i-fluent-emoji-high-contrast-worm" class="text-amber-500" />
-                      <span class="text-sm text-amber-700 dark:text-amber-300">Vermifuge (7j)</span>
-                    </div>
-                  </div>
-                  <div class="p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800">
-                    <div class="flex gap-2 items-center">
-                      <UIcon name="i-tabler-dog-bowl" class="text-blue-500" />
-                      <span class="text-sm text-blue-700 dark:text-blue-300">300g/jour</span>
-                    </div>
-                  </div>
-                  <div class="p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800">
-                    <div class="flex gap-2 items-center">
-                      <UIcon name="i-healthicons-weight-outline" class="text-purple-500" />
-                      <span class="text-sm text-purple-700 dark:text-purple-300">28.5 kg</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </UContainer>
-    </div>
-
-    <!-- Features Section -->
-    <UContainer class="py-16">
-      <div class="text-center mb-12">
-        <UBadge color="blue" variant="subtle" class="mb-2">Pourquoi Dog Plan ?</UBadge>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          Une solution complète pour le bien-être de votre animal
-        </h2>
-        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Tout ce dont vous avez besoin pour prendre soin de votre compagnon, au même endroit
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <UCard class="transition-all hover:shadow-lg">
-          <template #header>
-            <div class="flex justify-center p-4">
-              <div class="bg-blue-100 dark:bg-blue-900/30 p-4 rounded-full">
-                <UIcon name="i-heroicons-chart-bar" class="text-blue-500 text-4xl" />
-              </div>
-            </div>
-          </template>
-          <div class="text-center">
-            <h3 class="font-bold text-lg mb-2">Suivi santé en temps réel</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Poids, croquettes, vermifuges… tout est historisé et visualisable
-            </p>
-          </div>
-        </UCard>
-
-        <UCard class="transition-all hover:shadow-lg">
-          <template #header>
-            <div class="flex justify-center p-4">
-              <div class="bg-green-100 dark:bg-green-900/30 p-4 rounded-full">
-                <UIcon name="i-heroicons-calendar" class="text-green-500 text-4xl" />
-              </div>
-            </div>
-          </template>
-          <div class="text-center">
-            <h3 class="font-bold text-lg mb-2">Agenda intelligent</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Rappels de vaccins, antiparasitaires, rendez-vous vétérinaire
-            </p>
-          </div>
-        </UCard>
-
-        <UCard class="transition-all hover:shadow-lg">
-          <template #header>
-            <div class="flex justify-center p-4">
-              <div class="bg-purple-100 dark:bg-purple-900/30 p-4 rounded-full">
-                <UIcon name="i-heroicons-device-phone-mobile" class="text-purple-500 text-4xl" />
-              </div>
-            </div>
-          </template>
-          <div class="text-center">
-            <h3 class="font-bold text-lg mb-2">Interface responsive</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Accédez à toutes les infos où que vous soyez, sur tous vos appareils
-            </p>
-          </div>
-        </UCard>
-
-        <UCard class="transition-all hover:shadow-lg">
-          <template #header>
-            <div class="flex justify-center p-4">
-              <div class="bg-amber-100 dark:bg-amber-900/30 p-4 rounded-full">
-                <UIcon name="i-heroicons-lock-closed" class="text-amber-500 text-4xl" />
-              </div>
-            </div>
-          </template>
-          <div class="text-center">
-            <h3 class="font-bold text-lg mb-2">Données sécurisées</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Authentification sécurisée via Google, base Supabase
-            </p>
-          </div>
-        </UCard>
-      </div>
-    </UContainer>
-
-    <!-- Profile Section -->
-    <div class="bg-gray-50 dark:bg-gray-900/50 py-16">
-      <UContainer>
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div class="order-2 md:order-1">
-            <!-- Profile Preview -->
-            <div class="rounded-2xl shadow-lg bg-white dark:bg-neutral-800 overflow-hidden">
-              <div class="h-24 bg-gradient-to-r from-blue-200/20 to-indigo-100/20"></div>
-              <div class="relative px-6">
-                <UAvatar
-                    src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e"
-                    alt="Dog profile"
-                    size="3xl"
-                    class="absolute -top-12 ring-4 ring-white dark:ring-neutral-800"
-                />
-                <div class="pt-14 pb-6">
-                  <div class="flex items-center gap-2 mb-2">
-                    <h3 class="text-xl font-medium text-neutral-800 dark:text-neutral-100">Luna</h3>
-                    <UIcon
-                        name="i-ic-baseline-female"
-                        class="text-pink-500"
-                    />
-                  </div>
-                  <div class="text-neutral-500 dark:text-neutral-400 flex items-center gap-4">
-                    <span class="flex items-center">
-                      <UIcon name="i-heroicons-calendar" class="mr-1" size="sm" />
-                      2 ans
-                    </span>
-                    <span class="flex items-center">
-                      <UIcon name="i-heroicons-scale" class="mr-1" size="sm" />
-                      8.2 kg
-                    </span>
-                  </div>
-
-                  <div class="mt-4 grid grid-cols-2 gap-2">
-                    <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
-                      <UIcon name="i-heroicons-bug-ant" size="sm" class="text-green-500" />
-                      <span class="text-xs text-neutral-600 dark:text-neutral-400">Protection anti-puces</span>
-                    </div>
-                    <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
-                      <UIcon name="i-fluent-emoji-high-contrast-worm" size="sm" class="text-green-500" />
-                      <span class="text-xs text-neutral-600 dark:text-neutral-400">Vermifuge</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="order-1 md:order-2">
-            <UBadge color="blue" variant="subtle" class="mb-2">Un profil par animal</UBadge>
-            <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-              Créez une fiche unique pour chaque compagnon
-            </h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">
-              Nom, race, âge, photo, et suivez son évolution au fil des mois. Ajoutez autant d'animaux que vous le souhaitez.
-            </p>
-
-            <div class="space-y-3 mb-6">
-              <div class="flex items-center gap-2">
-                <UIcon name="i-heroicons-check-circle" class="text-green-500 flex-shrink-0" />
-                <span>Historique médical complet</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <UIcon name="i-heroicons-check-circle" class="text-green-500 flex-shrink-0" />
-                <span>Suivi de poids avec graphiques</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <UIcon name="i-heroicons-check-circle" class="text-green-500 flex-shrink-0" />
-                <span>Gestion des traitements préventifs</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <UIcon name="i-heroicons-check-circle" class="text-green-500 flex-shrink-0" />
-                <span>Rappels automatiques personnalisés</span>
-              </div>
-            </div>
-
-            <UButton color="primary" icon="i-heroicons-plus" to="/register">
-              Ajouter mon animal
-            </UButton>
-          </div>
-        </div>
-      </UContainer>
-    </div>
-
-    <!-- Dashboard Section -->
-    <UContainer class="py-16">
-      <div class="text-center mb-12">
-        <UBadge color="blue" variant="subtle" class="mb-2">Un tableau de bord complet</UBadge>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          Tout ce dont vous avez besoin, en un coup d'œil
-        </h2>
-        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Une interface intuitive qui rassemble toutes les informations essentielles de votre animal
-        </p>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <UCard class="transition-all hover:shadow-lg">
-          <div class="p-4">
-            <UIcon name="i-healthicons-weight-outline" class="text-blue-500 text-2xl mb-2" />
-            <h3 class="font-bold text-lg mb-2">Graphiques de poids</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Suivez visuellement l'évolution du poids de votre animal au fil du temps
-            </p>
-          </div>
-        </UCard>
-
-        <UCard class="transition-all hover:shadow-lg">
-          <div class="p-4">
-            <UIcon name="i-heroicons-clipboard-document-list" class="text-green-500 text-2xl mb-2" />
-            <h3 class="font-bold text-lg mb-2">Historique des soins</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Vaccins, visites vétérinaires et tous les soins médicaux en un endroit
-            </p>
-          </div>
-        </UCard>
-
-        <UCard class="transition-all hover:shadow-lg">
-          <div class="p-4">
-            <UIcon name="i-tabler-dog-bowl" class="text-amber-500 text-2xl mb-2" />
-            <h3 class="font-bold text-lg mb-2">Alimentation & routines</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Gérez les rations quotidiennes et suivez le stock de nourriture
-            </p>
-          </div>
-        </UCard>
-
-        <UCard class="transition-all hover:shadow-lg">
-          <div class="p-4">
-            <UIcon name="i-heroicons-pencil-square" class="text-purple-500 text-2xl mb-2" />
-            <h3 class="font-bold text-lg mb-2">Journal d'observations</h3>
-            <p class="text-gray-600 dark:text-gray-400">
-              Notez les comportements ou changements importants à surveiller
-            </p>
-          </div>
-        </UCard>
-      </div>
-    </UContainer>
-
-    <!-- Testimonials Section -->
-    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 py-16">
-      <UContainer>
-        <div class="text-center mb-12">
-          <UBadge color="blue" variant="subtle" class="mb-2">Témoignages</UBadge>
-          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Ce que disent nos utilisateurs
+      <!-- Hero Section -->
+      <div class="flex flex-col md:flex-row items-center gap-12 py-16">
+        <div class="w-full md:w-1/2">
+          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
+            Suivez, planifiez et <span class="text-amber-500 dark:text-amber-400">aimez mieux</span>.
+          </h1>
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-gray-200 mb-6">
+            Votre carnet de santé numérique pour animaux.
           </h2>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <UCard class="transition-all hover:shadow-lg bg-white dark:bg-neutral-900">
-            <div class="flex flex-col h-full">
-              <div class="flex mb-4">
-                <UProgress disabled :model-value="5" :max="5" />
-              </div>
-              <p class="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
-                "Dog Plan m'a permis de détecter un changement de poids trop rapide chez mon chien. Une visite chez le vétérinaire a confirmé un problème que j'aurais pu manquer."
-              </p>
-              <div class="flex items-center mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-                <UAvatar src="https://images.unsplash.com/photo-1580489944761-15a19d654956" size="sm" class="mr-3" />
-                <div>
-                  <p class="font-medium text-sm">Alice</p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">Propriétaire de Nala 🐕</p>
-                </div>
-              </div>
-            </div>
-          </UCard>
-
-          <UCard class="transition-all hover:shadow-lg bg-white dark:bg-neutral-900">
-            <div class="flex flex-col h-full">
-              <div class="flex mb-4">
-                <UProgress disabled :model-value="5" :max="5" />
-              </div>
-              <p class="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
-                "Je n'oublie plus jamais un traitement antipuce grâce aux rappels ! L'application est super intuitive et me permet de suivre facilement la santé de mon chien."
-              </p>
-              <div class="flex items-center mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-                <UAvatar src="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1" size="sm" class="mr-3" />
-                <div>
-                  <p class="font-medium text-sm">Marc</p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">Maître de Bolt 🐾</p>
-                </div>
-              </div>
-            </div>
-          </UCard>
-
-          <UCard class="transition-all hover:shadow-lg bg-white dark:bg-neutral-900">
-            <div class="flex flex-col h-full">
-              <div class="flex mb-4">
-                <UProgress disabled :model-value="4" :max="5" />
-              </div>
-              <p class="text-gray-600 dark:text-gray-400 mb-4 flex-grow">
-                "Super application qui me permet de coordonner les soins de nos deux chiens avec mon conjoint. On est toujours sur la même page et on ne risque pas d'oublier les traitements importants."
-              </p>
-              <div class="flex items-center mt-auto pt-4 border-t border-gray-100 dark:border-gray-800">
-                <UAvatar src="https://images.unsplash.com/photo-1614644147724-2d4785d69962" size="sm" class="mr-3" />
-                <div>
-                  <p class="font-medium text-sm">Sophie</p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">Propriétaire de Max et Lola 🐕🐕</p>
-                </div>
-              </div>
-            </div>
-          </UCard>
-        </div>
-      </UContainer>
-    </div>
-
-    <!-- FAQ Section -->
-    <UContainer class="py-16">
-      <div class="text-center mb-12">
-        <UBadge color="blue" variant="subtle" class="mb-2">Questions fréquentes</UBadge>
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          Tout ce que vous devez savoir
-        </h2>
-      </div>
-
-      <div class="max-w-3xl mx-auto">
-        <UAccordion :items="[
-          {
-            heading: 'Est-ce gratuit ?',
-            content: 'Oui, Dog Plan est 100% gratuit pour le suivi d\'un animal. Nous proposons également une formule premium avec des fonctionnalités avancées pour les propriétaires de plusieurs animaux.',
-            icon: 'i-heroicons-currency-euro'
-          },
-          {
-            heading: 'Puis-je ajouter plusieurs chiens ?',
-            content: 'Bien sûr, Dog Plan est pensé pour les familles multi-chiens. Vous pouvez ajouter autant d\'animaux que vous le souhaitez et gérer leurs profils individuellement.',
-            icon: 'i-heroicons-user-group'
-          },
-          {
-            heading: 'Et les chats ?',
-            content: 'Absolument ! Bien que le nom soit Dog Plan, notre application est conçue pour tous les animaux de compagnie. Les chats, NAC et autres compagnons sont les bienvenus.',
-            icon: 'i-heroicons-face-smile'
-          },
-          {
-            heading: 'Mes données sont-elles sécurisées ?',
-            content: 'La sécurité de vos données est notre priorité. Nous utilisons Supabase, une infrastructure sécurisée et robuste pour stocker toutes les informations. L\'authentification est gérée via Google pour assurer un niveau de sécurité optimal.',
-            icon: 'i-heroicons-shield-check'
-          },
-          {
-            heading: 'Puis-je partager le profil avec mon vétérinaire ?',
-            content: 'Oui, vous pouvez générer un rapport PDF ou un lien de partage temporaire pour donner accès aux informations importantes à votre vétérinaire lors des consultations.',
-            icon: 'i-heroicons-share'
-          }
-        ]" />
-      </div>
-    </UContainer>
-
-    <!-- CTA Section -->
-    <div class="bg-blue-600 dark:bg-blue-800 py-16 text-white">
-      <UContainer>
-        <div class="text-center max-w-2xl mx-auto">
-          <h2 class="text-3xl font-bold mb-4">
-            Prêt à mieux prendre soin de votre animal ?
-          </h2>
-          <p class="text-blue-100 mb-8">
-            Créez un compte gratuit en quelques secondes et commencez à suivre la santé de votre compagnon dès aujourd'hui.
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+            Un tableau de bord intelligent pour surveiller le poids, l'alimentation, les traitements antiparasitaires de vos compagnons. Pensé pour les maîtres exigeants.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <div class="flex flex-col sm:flex-row gap-4">
             <UButton
-                color="white"
+                to="/login"
                 size="xl"
-                to="/register">
-              Créer un compte
-            </UButton>
-            <UButton
-                variant="ghost"
-                color="white"
-                size="xl"
-                to="/demo">
-              Essayer la démo
-            </UButton>
-          </div>
-        </div>
-      </UContainer>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-100 dark:bg-gray-900 py-12">
-      <UContainer>
-        <div class="grid md:grid-cols-4 gap-8">
-          <div>
-            <div class="flex items-center gap-2 mb-4">
-              <UIcon name="i-fluent-animal-dog-16-regular" class="text-blue-500 text-2xl" />
-              <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">Dog Plan</h3>
-            </div>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">
-              La santé de votre chien. Simplifiée. Centralisée. Enfin maîtrisée.
-            </p>
-            <div class="flex gap-4">
-              <UButton icon="i-mdi-twitter" color="gray" variant="ghost" square aria-label="Twitter" />
-              <UButton icon="i-mdi-instagram" color="gray" variant="ghost" square aria-label="Instagram" />
-              <UButton icon="i-mdi-facebook" color="gray" variant="ghost" square aria-label="Facebook" />
-            </div>
-          </div>
-
-          <div>
-            <h4 class="font-medium text-lg mb-4">Liens rapides</h4>
-            <ul class="space-y-2">
-              <li><ULink href="/fonctionnalites" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">Fonctionnalités</ULink></li>
-              <li><ULink href="/tarifs" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">Tarifs</ULink></li>
-              <li><ULink href="/temoignages" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">Témoignages</ULink></li>
-              <li><ULink href="/faq" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">FAQ</ULink></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="font-medium text-lg mb-4">Légal</h4>
-            <ul class="space-y-2">
-              <li><ULink href="/mentions-legales" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">Mentions légales</ULink></li>
-              <li><ULink href="/confidentialite" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">Politique de confidentialité</ULink></li>
-              <li><ULink href="/cgu" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">CGU</ULink></li>
-              <li><ULink href="/cookies" class="text-gray-600 dark:text-gray-400 hover:text-blue-500">Cookies</ULink></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="font-medium text-lg mb-4">Contact</h4>
-            <p class="text-gray-600 dark:text-gray-400 mb-3">
-              Une question ? Besoin d'aide ?
-            </p>
-            <UButton
-                icon="i-heroicons-envelope"
-                color="blue"
-                to="mailto:contact@dogplan.fr"
-                class="mb-4"
+                color="primary"
+                class="bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-500 dark:to-amber-600 text-white"
             >
-              Nous contacter
+              <UIcon name="i-devicon-google" class="mr-2" />
+              Se connecter avec Google
             </UButton>
-            <p class="text-gray-500 dark:text-gray-400 text-sm mt-6">
-              Développé avec <UIcon name="i-heroicons-heart" class="text-red-500" /> en France
+            <UButton
+                to="/demo"
+                size="xl"
+                variant="outline"
+                class="border-gray-300 dark:border-gray-700"
+            >
+              <UIcon name="i-lucide-play" class="mr-2" />
+              Voir la démo
+            </UButton>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transform rotate-2 hover:rotate-0 transition-all duration-300">
+            <img src="/demo.png" alt="Dashboard Preview" class="w-full" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="py-20">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Pourquoi PawData ?</h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Une solution complète pour prendre soin de vos animaux comme jamais auparavant.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Feature 1 -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
+            <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+              <UIcon name="i-lucide-activity" class="h-8 w-8 text-blue-500 dark:text-blue-400" />
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Suivi santé en temps réel</h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Poids, croquettes, vermifuges… tout est historisé et visualisable en graphiques clairs.
             </p>
-            <p class="text-gray-500 dark:text-gray-400 text-sm">
-              © 2025 Dog Plan
+          </div>
+
+          <!-- Feature 2 -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
+            <div class="bg-amber-50 dark:bg-amber-900/30 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+              <UIcon name="i-lucide-calendar" class="h-8 w-8 text-amber-500 dark:text-amber-400" />
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Agenda intelligent</h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Rappels de vaccins, antiparasitaires et rendez-vous vétérinaires à jour.
+            </p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
+            <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+              <UIcon name="i-lucide-smartphone" class="h-8 w-8 text-green-500 dark:text-green-400" />
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Interface responsive</h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Accédez à toutes les informations de vos animaux où que vous soyez, sur tous vos appareils.
+            </p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
+            <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+              <UIcon name="i-lucide-shield" class="h-8 w-8 text-purple-500 dark:text-purple-400" />
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Données sécurisées</h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Authentification sécurisée via Google, base de données Supabase protégée.
             </p>
           </div>
         </div>
-      </UContainer>
-    </footer>
+      </div>
+
+      <!-- Profil Section -->
+      <div class="py-20 flex flex-col md:flex-row items-center gap-12">
+        <div class="w-full md:w-1/2">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 transform -rotate-2 hover:rotate-0 transition-all duration-300 border border-gray-100 dark:border-gray-700">
+            <!-- Preview of an animal profile -->
+            <div class="relative">
+              <div class="h-24 bg-gradient-to-r from-blue-200/20 to-indigo-100/20 rounded-t-xl"></div>
+              <div class="absolute -bottom-10 left-6">
+                <div class="w-20 h-20 bg-gray-300 dark:bg-gray-600 rounded-full ring-4 ring-white dark:ring-gray-800 shadow-md overflow-hidden">
+                  <UIcon name="i-fluent-animal-dog-16-regular" class="w-full h-full p-4 text-gray-700 dark:text-gray-300" />
+                </div>
+              </div>
+            </div>
+            <div class="mt-12 p-4">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-xl font-medium text-gray-800 dark:text-gray-100">Rex</h3>
+                    <UIcon name="i-ic-baseline-male" class="text-blue-500" />
+                  </div>
+                  <div class="text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-4">
+                    <span class="flex items-center">
+                      <UIcon name="i-heroicons-calendar" class="mr-1 text-gray-400 dark:text-gray-200" size="sm" />
+                      3 ans et 2 mois
+                    </span>
+                    <span class="flex items-center">
+                      <UIcon name="i-heroicons-scale" class="mr-1 text-gray-400 dark:text-gray-200" size="sm" />
+                      28 kg
+                    </span>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <UBadge color="warning" variant="subtle" class="cursor-help">
+                    <div class="flex items-center">
+                      <UIcon name="i-heroicons-exclamation-triangle" class="mr-1" size="sm" />
+                      <span class="hidden sm:inline">Attention</span>
+                    </div>
+                  </UBadge>
+                </div>
+              </div>
+              <div class="mt-4 grid grid-cols-2 gap-2">
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-950">
+                  <UIcon name="i-heroicons-bug-ant" size="sm" class="text-red-500" />
+                  <span class="text-xs text-gray-600 dark:text-gray-400">Protection anti-puces</span>
+                </div>
+                <div class="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-gray-950">
+                  <UIcon name="i-fluent-emoji-high-contrast-worm" size="sm" class="text-green-500" />
+                  <span class="text-xs text-gray-600 dark:text-gray-400">Vermifuge</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full md:w-1/2">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Un profil par animal</h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
+            Créez une fiche unique pour chaque compagnon avec toutes ses informations importantes :
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-center gap-3">
+              <div class="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-full">
+                <UIcon name="i-lucide-check" class="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <span class="text-gray-700 dark:text-gray-300">Suivi complet du poids avec graphique d'évolution</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-full">
+                <UIcon name="i-lucide-check" class="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <span class="text-gray-700 dark:text-gray-300">Gestion des traitements antiparasitaires</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-full">
+                <UIcon name="i-lucide-check" class="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <span class="text-gray-700 dark:text-gray-300">Suivi de l'alimentation et des croquettes</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <div class="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-full">
+                <UIcon name="i-lucide-check" class="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+              <span class="text-gray-700 dark:text-gray-300">Alertes personnalisées pour ne rien oublier</span>
+            </li>
+          </ul>
+          <div class="mt-8">
+            <UButton
+                to="/login"
+                size="lg"
+                color="primary"
+                class="bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-500 dark:to-amber-600 text-white"
+            >
+              Créer le profil de mon animal
+            </UButton>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard Section -->
+      <div class="py-20">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Un tableau de bord complet</h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Toutes les données de vos animaux centralisées et facilement accessibles.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Graph de poids -->
+            <div class="md:col-span-2 bg-gray-50 dark:bg-gray-900 p-4 rounded-xl">
+              <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">Évolution du poids</h3>
+              <div class="h-64 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">
+                <UIcon name="i-lucide-trending-up" class="h-10 w-10 text-amber-500 dark:text-amber-400" />
+                <!-- Ici, vous pourriez intégrer un graphique D3.js ou similaire -->
+              </div>
+            </div>
+
+            <!-- Infos rapides -->
+            <div class="space-y-4">
+              <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl">
+                <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">Prochain traitement</h3>
+                <div class="flex items-center gap-3">
+                  <div class="bg-red-100 dark:bg-red-900/30 p-3 rounded-full">
+                    <UIcon name="i-heroicons-bug-ant" class="h-6 w-6 text-red-600 dark:text-red-400" />
+                  </div>
+                  <div>
+                    <div class="text-gray-700 dark:text-gray-300 font-medium">Anti-puces</div>
+                    <div class="text-gray-500 dark:text-gray-400 text-sm">Dans 5 jours</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl">
+                <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">Croquettes</h3>
+                <div class="flex items-center gap-3">
+                  <div class="bg-amber-100 dark:bg-amber-900/30 p-3 rounded-full">
+                    <UIcon name="i-tabler-dog-bowl" class="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                  </div>
+                  <div>
+                    <div class="text-gray-700 dark:text-gray-300 font-medium">Stock: 2.5kg</div>
+                    <div class="text-gray-500 dark:text-gray-400 text-sm">Suffisant pour 12 jours</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-xl">
+                <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">Poids récent</h3>
+                <div class="flex items-center gap-3">
+                  <div class="bg-green-100 dark:bg-green-900/30 p-3 rounded-full">
+                    <UIcon name="i-healthicons-weight-outline" class="h-6 w-6 text-green-600 dark:text-green-400" />
+                  </div>
+                  <div>
+                    <div class="text-gray-700 dark:text-gray-300 font-medium">28 kg (+0.5kg)</div>
+                    <div class="text-gray-500 dark:text-gray-400 text-sm">Mesuré il y a 2 jours</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonials Section -->
+      <div class="py-20">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Ce que disent nos utilisateurs</h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Découvrez comment PawData transforme la vie des propriétaires d'animaux.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Témoignage 1 -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
+            <div class="flex items-center mb-4">
+              <div class="h-12 w-12 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mr-4">
+                <UIcon name="i-heroicons-user-circle" class="h-full w-full text-gray-400 dark:text-gray-500" />
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-900 dark:text-white">Alice</h4>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Propriétaire de Nala 🐕</p>
+              </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">
+              "PawData m'a permis de détecter un changement de poids trop rapide chez mon chien. J'ai pu consulter mon vétérinaire à temps !"
+            </p>
+            <div class="mt-4 flex">
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+            </div>
+          </div>
+
+          <!-- Témoignage 2 -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
+            <div class="flex items-center mb-4">
+              <div class="h-12 w-12 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mr-4">
+                <UIcon name="i-heroicons-user-circle" class="h-full w-full text-gray-400 dark:text-gray-500" />
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-900 dark:text-white">Marc</h4>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Maître de Bolt 🐾</p>
+              </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">
+              "Je n'oublie plus jamais un traitement antipuce grâce aux rappels ! L'interface est intuitive et j'adore le graphique de poids."
+            </p>
+            <div class="mt-4 flex">
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star-half" class="h-5 w-5 text-amber-500" />
+            </div>
+          </div>
+
+          <!-- Témoignage 3 -->
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-gray-700">
+            <div class="flex items-center mb-4">
+              <div class="h-12 w-12 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mr-4">
+                <UIcon name="i-heroicons-user-circle" class="h-full w-full text-gray-400 dark:text-gray-500" />
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-900 dark:text-white">Sophie</h4>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Famille multi-chiens 🐕🐕‍🦺</p>
+              </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">
+              "Avec trois chiens à la maison, PawData est devenu indispensable. Je peux suivre facilement quel chien a besoin de quelle attention !"
+            </p>
+            <div class="mt-4 flex">
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+              <UIcon name="i-lucide-star" class="h-5 w-5 text-amber-500" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="py-20">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">Questions fréquentes</h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Tout ce que vous devez savoir pour commencer.
+          </p>
+        </div>
+
+        <div class="max-w-3xl mx-auto">
+          <UAccordion class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <UAccordionItem>
+              <template #title>Est-ce gratuit ?</template>
+              <div class="p-4 text-gray-600 dark:text-gray-300">
+                Oui, PawData est 100% gratuit pour le suivi d'un animal. Notre objectif est de rendre accessible à tous une gestion de santé optimale pour leurs compagnons.
+              </div>
+            </UAccordionItem>
+            <UAccordionItem>
+              <template #title>Puis-je ajouter plusieurs chiens ?</template>
+              <div class="p-4 text-gray-600 dark:text-gray-300">
+                Bien sûr ! PawData est pensé pour les familles multi-chiens. Vous pouvez ajouter autant d'animaux que vous le souhaitez et gérer leurs profils individuellement.
+              </div>
+            </UAccordionItem>
+            <UAccordionItem>
+              <template #title>Et les chats ?</template>
+              <div class="p-4 text-gray-600 dark:text-gray-300">
+                Notre application est actuellement optimisée pour les chiens, mais nous travaillons activement sur une mise à jour pour inclure nos amis félins très bientôt ! 😺
+              </div>
+            </UAccordionItem>
+            <UAccordionItem>
+              <template #title>Mes données sont-elles sécurisées ?</template>
+              <div class="p-4 text-gray-600 dark:text-gray-300">
+                Absolument. Nous utilisons l'authentification Google et Supabase pour garantir une sécurité maximale. Vos données ne sont jamais partagées avec des tiers.
+              </div>
+            </UAccordionItem>
+            <UAccordionItem>
+              <template #title>Comment fonctionnent les rappels ?</template>
+              <div class="p-4 text-gray-600 dark:text-gray-300">
+                PawData calcule automatiquement les dates importantes en fonction des données que vous entrez. Vous recevrez des notifications visuelles directement dans l'application quand une action est nécessaire.
+              </div>
+            </UAccordionItem>
+          </UAccordion>
+        </div>
+      </div>
+
+      <!-- CTA Section -->
+      <div class="py-20">
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 rounded-2xl p-12 text-center shadow-lg border border-amber-100 dark:border-amber-900/50">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Prêt à mieux prendre soin de votre compagnon ?</h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
+            Rejoignez des milliers de propriétaires qui ont changé leur façon de prendre soin de leurs animaux.
+          </p>
+          <UButton
+              to="/login"
+              size="xl"
+              color="primary"
+              class="bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-500 dark:to-amber-600 text-white"
+          >
+            Commencer gratuitement
+            <UIcon name="i-heroicons-arrow-right" class="ml-2" />
+          </UButton>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="py-12 border-t border-gray-200 dark:border-gray-800">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="flex items-center gap-3 mb-6 md:mb-0">
+            <div class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-sm">
+              <UIcon name="i-tabler-paw" class="h-6 w-6 text-amber-500 dark:text-amber-400" />
+            </div>
+            <span class="text-xl font-medium text-gray-900 dark:text-white">PawData</span>
+          </div>
+          <div class="flex flex-wrap gap-6 justify-center md:justify-end">
+            <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Mentions légales</a>
+            <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Contact</a>
+            <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors">Politique de confidentialité</a>
+          </div>
+        </div>
+        <div class="text-center mt-8 text-sm text-gray-500 dark:text-gray-400">
+          Développé avec <UIcon name="i-heroicons-heart" class="inline-block text-red-500" /> en France | © 2025 PawData
+        </div>
+      </footer>
+    </div>
   </div>
 </template>
-<script setup lang="ts">
+
+<script setup>
+// Animations personnalisées pour les blobs
+const animationStyles = `
+  @keyframes blob {
+    0% {
+      transform: translate(0px, 0px) scale(1);
+    }
+    33% {
+      transform: translate(30px, -50px) scale(1.1);
+    }
+    66% {
+      transform: translate(-20px, 20px) scale(0.9);
+    }
+    100% {
+      transform: translate(0px, 0px) scale(1);
+    }
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+`;
+
+// Mode sombre
+const colorMode = useColorMode();
 </script>
+
+<style>
+/* Les animations pour les blobs */
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+</style>
