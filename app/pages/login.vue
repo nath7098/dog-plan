@@ -1,5 +1,7 @@
 <template>
     <div class="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-blue-950 transition-colors duration-300">
+      <UButton variant="link" icon="i-lucide-arrow-left" to="/landing" />
+
       <!-- Formes décoratives -->
       <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div class="absolute top-10 left-10 w-64 h-64 bg-yellow-200 dark:bg-yellow-700 rounded-full mix-blend-multiply dark:mix-blend-overlay filter blur-3xl opacity-20 animate-blob"></div>
@@ -60,11 +62,6 @@
             et notre
             <a href="#" class="text-amber-600 dark:text-amber-400 hover:underline font-medium">Politique de confidentialité</a>
           </p>
-          
-          <!-- Sélecteur de thème -->
-          <div class="mt-6 inline-flex items-center justify-center">
-            <UColorModeButton color="amber" variant="outline" class="text-gray-500 dark:text-gray-400" />
-          </div>
         </div>
       </div>
     </div>

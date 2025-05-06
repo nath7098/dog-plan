@@ -165,10 +165,10 @@
 
 <script lang="ts" setup>
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
-
-definePageMeta({
-  middleware: 'auth'
-})
+//
+// definePageMeta({
+//   middleware: 'auth'
+// })
 
 type AnimalInfo = {
   level: 'info' | 'warning' | 'danger';
