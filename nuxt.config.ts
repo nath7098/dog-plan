@@ -19,6 +19,11 @@ export default defineNuxtConfig({
     prefix: 'D',
     componentDir: './components/ui'
   },
+  supabase: {
+    redirectOptions: {
+      exclude: ['/landing']
+    }
+  },
   runtimeConfig: {
     public: {
        url: process.env.URL || 'http://localhost:3000'
