@@ -21,7 +21,8 @@ export default defineNuxtConfig({
   },
   supabase: {
     redirectOptions: {
-      exclude: ['/landing']
+      exclude: ['/landing', '/signup'],
+      login: '/signin'
     }
   },
   runtimeConfig: {

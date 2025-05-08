@@ -1,5 +1,8 @@
 <template>
   <div class="min-h-screen light:bg-gradient-to-br light:from-slate-50 light:to-blue-50 p-8">
+    <div v-if="user.user_metadata.first_name">
+      Heureux de vous revoir, {{user.user_metadata.first_name}}
+    </div>
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <div class="mb-8 text-center">
@@ -165,10 +168,7 @@
 
 <script lang="ts" setup>
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
-//
-// definePageMeta({
-//   middleware: 'auth'
-// })
+
 
 type AnimalInfo = {
   level: 'info' | 'warning' | 'danger';
@@ -176,6 +176,7 @@ type AnimalInfo = {
   text: string;
 }
 
+const user = useSupabaseUser();
 const animalStore = useAnimalStore();
 
 // Initialize the store
