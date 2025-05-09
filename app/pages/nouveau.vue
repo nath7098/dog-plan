@@ -1,25 +1,19 @@
 <template>
   <div class="p-8 max-w-4xl mx-auto">
-    <!-- Header with back button -->
-    <div class="flex items-center mb-10">
-      <UButton icon="i-lucide-arrow-left" variant="ghost" to="/" class="mr-4" />
-      <h1 class="text-3xl font-medium">Ajouter un animal</h1>
-    </div>
-
-    <!-- Simple form with clean layout -->
-    <UCard class="rounded-xl p-6">
+    <DCard>
+      <h1 class="mb-12 text-3xl font-bold text-neutral-500/80! dark:text-neutral-400/80!"><UIcon name="i-tabler-paw" class="text-amber-500" /> Votre nouveau compagnon</h1>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Left column - Essential information -->
         <div class="flex flex-col gap-6">
           <!-- Name input - Required -->
           <UFormField label="Nom" required>
-            <UInput v-model="formData.name" placeholder="Nom de votre animal" />
+            <UInput v-model="formData.name" color="neutral" class="w-full" placeholder="Saphyr" :ui="{base: 'bg-transparent backdrop-blur-sm placeholder:text-neutral-700 dark:placeholder:text-neutral-300'}" />
           </UFormField>
 
           <!-- Birth date - Required -->
           <UFormField label="Date de naissance" required>
             <UPopover>
-              <UButton color="neutral" variant="subtle" icon="i-lucide-calendar">
+              <UButton variant="outline" color="neutral" icon="i-lucide-calendar" class="w-full bg-transparent! backdrop-blur-sm" >
                 {{ formData.birthDate ? df.format(formData.birthDate.toDate(getLocalTimeZone())) : 'Select a date' }}
               </UButton>
 
@@ -34,12 +28,12 @@
 
           <!-- Weight input -->
           <UFormField label="Poids (kg)">
-            <UInput v-model="formData.weight" type="number" step="0.1" placeholder="Poids en kg" />
+            <UInput v-model="formData.weight" color="neutral" class="w-full" type="number" step="0.1" placeholder="31" :ui="{base: 'bg-transparent backdrop-blur-sm placeholder:text-neutral-700 dark:placeholder:text-neutral-300'}" />
           </UFormField>
 
           <!-- Food quantity -->
           <UFormField label="Quantité de croquettes (g/jour)">
-            <UInput v-model="formData.mealQuantity" type="number" placeholder="Quantité journalière" />
+            <UInput v-model="formData.mealQuantity" color="neutral" class="w-full" type="number" placeholder="309" :ui="{base: 'bg-transparent backdrop-blur-sm placeholder:text-neutral-700 dark:placeholder:text-neutral-300'}" />
           </UFormField>
         </div>
 
@@ -47,7 +41,7 @@
         <div class="flex flex-col gap-6">
           <!-- Type selection with icons -->
           <UFormField label="Type d'animal">
-            <UButtonGroup block>
+            <UButtonGroup block class="w-full">
               <UButton v-for="type in petTypes" :key="type.value" @click="formData.type = type.value"
                 :variant="formData.type === type.value ? 'solid' : 'outline'" color="neutral">
                 <UIcon :name="type.icon" class="mr-2" />
@@ -58,13 +52,13 @@
 
           <!-- Gender selection -->
           <UFormField label="Genre">
-            <UButtonGroup block>
-              <UButton @click="formData.gender = 'male'" :class="formData.gender === 'male' ? 'text-blue-500' : ''"
+            <UButtonGroup block class="w-full">
+              <UButton @click="formData.gender = 'male'" :class="['bg-transparent! backdrop-blur-sm', formData.gender === 'male' ? 'text-blue-500' : '']"
                 :variant="formData.gender === 'male' ? 'solid' : 'outline'" color="neutral">
                 <UIcon name="i-ic-baseline-male" class="mr-2" />
                 Mâle
               </UButton>
-              <UButton @click="formData.gender = 'female'" :class="formData.gender === 'female' ? 'text-pink-500' : ''"
+              <UButton @click="formData.gender = 'female'" :class="['bg-transparent! backdrop-blur-sm', formData.gender === 'female' ? 'text-pink-500' : '']"
                 :variant="formData.gender === 'female' ? 'solid' : 'outline'" color="neutral">
                 <UIcon name="i-ic-baseline-female" class="mr-2" />
                 Femelle
@@ -79,20 +73,25 @@
 
       <!-- Form actions -->
       <div class="flex justify-end mt-8">
-        <UButton variant="outline" color="neutral" to="/" class="mr-4">
+        <UButton color="neutral" variant="link" to="/" class="mr-4 text-neutral-800! dark:text-neutral-100! rounded-lg backdrop-blur-sm ring-2 ring-neutral-100/20 dark:ring-neutral-700/20">
           Annuler
         </UButton>
         <UButton color="primary" :disabled="!formData.name || !formData.birthDate" @click="savePet">
           Ajouter à la famille
         </UButton>
       </div>
-    </UCard>
+    </DCard>
   </div>
 </template>
 
 <script setup lang="ts">
 import { CalendarDate, DateFormatter, getLocalTimeZone, today} from '@internationalized/date'
 import DAvatarSelector from '~/components/custom/DAvatarSelector.vue';
+import DCard from '~/components/custom/DCard.vue';
+
+definePageMeta({
+  layout: 'authenticated'
+})
 
 const client = useSupabaseClient();
 const user = useSupabaseUser();
