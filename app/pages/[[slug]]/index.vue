@@ -1,8 +1,9 @@
 <template>
-  <div v-if="animal" class="p-6 max-w-6xl mx-auto">
-    <!-- Profile Header Section with Background -->
-    <UButton variant="link" icon="i-lucide-arrow-left" to="/" />
-
+  <div v-if="!animal" class="text-center py-6">
+    <UIcon name="i-heroicons-arrow-path" class="animate-spin text-blue-500 text-2xl" />
+    <p class="mt-2 text-slate-600">Récupération des données {{name.value ? `de ${name.value}` : ''}}...</p>
+  </div>
+  <div v-else class="p-6 max-w-6xl mx-auto">
     <div class="rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 p-6 shadow-sm">
       <DProfileHeader
           :avatar="animal.avatar"
@@ -85,7 +86,6 @@
       </template>
     </UModal>
   </div>
-  <div v-else>loading {{ name }}</div>
 </template>
 <script lang="ts" setup>
 import DWeightHistory from '~/components/custom/DWeightHistory.vue';
@@ -98,6 +98,11 @@ import type { CalendarDate } from '@internationalized/date';
 import type Food from '~~/types/food';
 import type Weight from '~~/types/weight';
 
+definePageMeta({
+  layout: 'authenticated'
+})
+
+const reloaded = ref(false);
 const route = useRoute();
 const animalStore = useAnimalStore();
 const name = computed(() => route.params?.slug?.trim() ?? null);
@@ -105,10 +110,14 @@ const animal = ref<Animal>(null);
 const showWeightHistory = ref(false);
 const food = computed(() => animal?.food);
 
-onMounted(() => {
+onMounted(async () => {
   animal.value = animalStore.animalByName(name.value);
   if (!animal.value) {
-    navigateTo('/')
+    await animalStore.fetchAnimals();
+    animal.value = animalStore.animalByName(name.value);
+    if (!animal.value) {
+      navigateTo('/');
+    }
   }
 })
 
