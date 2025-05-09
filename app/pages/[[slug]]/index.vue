@@ -4,7 +4,7 @@
     <p class="mt-2 text-slate-600">Récupération des données {{name.value ? `de ${name.value}` : ''}}...</p>
   </div>
   <div v-else class="p-6 max-w-6xl mx-auto">
-    <div class="rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 p-6 shadow-sm">
+    <DCard>
       <DProfileHeader
           :avatar="animal.avatar"
           :name="animal.name"
@@ -12,59 +12,59 @@
           :birth-date="animal.birthDate"
           :weight="animal.weight"
           @open:weight="toggleWeightHistory" />
-    </div>
+    </DCard>
 
     <!-- Cards Grid Layout -->
     <div class="grid md:grid-cols-2 gap-6 mt-6">
       <!-- Food Management Card -->
-      <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
+      <DCard>
         <DProfileFood :name="animal.name" :food="food" :meal-quantity="animal.mealQuantity" />
-      </div>
+      </DCard>
 
       <!-- Health Management Section -->
       <div class="space-y-6">
         <!-- Flea Treatment Card -->
-        <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
+        <DCard>
           <DProfileFlea :name="animal.name" :start="toDate(animal.fleaProtection?.start!)" @select:start="updateFleaProtection" />
-        </div>
+        </DCard>
 
         <!-- Deworming Card -->
-        <div class="rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800 transition-all hover:shadow-md">
+        <DCard>
           <DProfileWorm :name="animal.name" :start="toDate(animal.wormProtection?.start!)" @select:start="updateWormProtection" />
-        </div>
+        </DCard>
       </div>
     </div>
 
     <!-- Pet Stats Section -->
-    <div class="mt-6 rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800">
+    <DCard class="mt-6">
       <h2 class="text-2xl mb-4 font-medium">Statistiques</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-800">
+        <div class="p-4 rounded-lg bg-green-900/20 border border-green-600/50 dark:border-green-800">
           <div class="text-xl font-medium text-green-800 dark:text-green-300">{{ animal.mealQuantity }}g</div>
           <div class="text-sm text-green-600 dark:text-green-400">Croquettes par jour</div>
         </div>
-        <div class="p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 cursor-pointer" @click="toggleWeightHistory">
+        <div class="p-4 rounded-lg bg-blue-900/20 border border-blue-600/50 dark:border-blue-800 cursor-pointer" @click="toggleWeightHistory">
           <div class="text-xl font-medium text-blue-800 dark:text-blue-300 flex items-center">
             {{ animal.weight }} kg
             <UIcon name="i-lucide-trending-up" class="ml-2" />
           </div>
           <div class="text-sm text-blue-600 dark:text-blue-400">Poids actuel</div>
         </div>
-        <div class="p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800">
+        <div class="p-4 rounded-lg bg-purple-900/20 border border-purple-600/50 dark:border-purple-800">
           <div class="text-xl font-medium text-purple-800 dark:text-purple-300">{{ displayAge }}</div>
           <div class="text-sm text-purple-600 dark:text-purple-400">Âge</div>
         </div>
       </div>
-    </div>
+    </DCard>
 
     <!-- Quick Actions Section -->
-    <div class="mt-6 rounded-xl bg-white dark:bg-neutral-900 p-6 shadow-sm border border-neutral-200 dark:border-neutral-800">
+    <DCard class="mt-6">
       <h2 class="text-2xl mb-4 font-medium">Actions rapides</h2>
       <div class="flex flex-wrap gap-3">
         <UButton icon="i-lucide-activity" variant="ghost" color="warning" @click="toggleWeightHistory">Ajouter un poids</UButton>
         <UButton icon="i-lucide-trash-2" variant="ghost" color="error" @click="onDeleteAnimal">Supprimer</UButton>
       </div>
-    </div>
+    </DCard>
 
     <!-- Weight History Modal -->
     <UModal v-model:open="showWeightHistory" :ui="{content: 'max-w-7xl'}">
@@ -93,9 +93,8 @@ import DProfileFlea from '~/components/profile/DProfileFlea.vue';
 import DProfileWorm from '~/components/profile/DProfileWorm.vue';
 import DProfileHeader from '~/components/profile/DProfileHeader.vue';
 import DProfileFood from '~/components/profile/DProfileFood.vue';
-import { ref } from 'vue';
+import DCard from '~/components/custom/DCard.vue';
 import type { CalendarDate } from '@internationalized/date';
-import type Food from '~~/types/food';
 import type Weight from '~~/types/weight';
 
 definePageMeta({

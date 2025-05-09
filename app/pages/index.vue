@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen light:bg-gradient-to-br light:from-slate-50 light:to-blue-50 p-8">
+  <div class="min-h-screen p-8">
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <div class="mb-8 text-center">
@@ -32,17 +32,14 @@
       <!-- Cards Container with Grid Layout -->
       <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- New Pet Card -->
-        <UButton variant="ghost" to="nouveau" class="group h-full">
-          <div class="bg-neutral-300 dark:bg-neutral-800 w-full rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-700 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full p-6">
-            <div class="flex items-center gap-6">
-              <div class="bg-blue-50/20 rounded-full p-6 group-hover:bg-blue-100 transition-colors">
-                <UIcon name="i-heroicons-plus" class="text-blue-500 text-3xl" />
-              </div>
-              <div>
-                <h3 class="text-xl font-medium dark:text-neutral-200 text-neutral-700">Ajouter un animal</h3>
-                <p class="dark:text-neutral-400 text-neutral-500 text-sm">Enregistrer un nouveau compagnon</p>
-              </div>
-            </div>
+        <UButton variant="link" to="nouveau" class="group h-full">
+          <div class="w-full flex justify-center items-center rounded-2xl shadow-sm bg-neutral-800/20 dark:bg-neutral-100/10 backdrop-blur-md ring-2 ring-neutral-100/20 dark:ring-neutral-700/20 overflow-hidden h-full">
+              <UAvatar
+                    icon="i-heroicons-plus"
+                    class="ring-3 ring-neutral-200 dark:ring-neutral-300 shadow-md"
+                    :ui="{root: 'size-24', icon: 'size-12'}"
+                />
+
           </div>
         </UButton>
 
@@ -51,28 +48,24 @@
           v-for="animal in animalStore.animals" 
           :key="animal.name" 
           :to="animal.name" 
-          variant="ghost" 
+          variant="link" 
           class="group h-full"
         >
-          <div class="bg-neutral-300 dark:bg-neutral-800 w-full rounded-2xl shadow-sm border border-neutral-200 dark:border-neutral-700 hover:shadow-lg hover:border-blue-200 transition-all duration-300 overflow-hidden h-full">
-            <div class="relative">
-              <!-- Banner Background - Dog/Cat/Pet themed background -->
-              <div class="h-24 bg-gradient-to-r from-blue-200/20 to-indigo-100/20"></div>
-
+          <div class="w-full rounded-2xl shadow-sm bg-neutral-800/20 dark:bg-neutral-100/10 backdrop-blur-sm ring-2 ring-neutral-100/20 dark:ring-neutral-700/20 overflow-hidden h-full">
+              
               <!-- Avatar, positioned to overlay the banner -->
-              <div class="absolute -bottom-10 left-6">
+              <div class="flex justify-center items-center w-full mt-8">
                 <UAvatar
                     :src="animal.avatar"
                     icon="i-fluent-animal-dog-16-regular"
                     :alt="animal.name"
-                    size="3xl"
                     class="ring-3 ring-neutral-200 dark:ring-neutral-300 shadow-md"
+                    :ui="{root: 'size-24', icon: 'size-12'}"
                 />
               </div>
-            </div>
 
             <!-- Content -->
-            <div class="mt-12 p-6">
+            <div class="mt-2 p-6">
               <div class="flex justify-between items-start">
                 <div>
                   <div class="flex items-center gap-2">

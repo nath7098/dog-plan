@@ -335,25 +335,61 @@ export const useAnimalStore = defineStore('animals', {
         this.loading = false;
       }
     },
+    async updateFoodOpenDate(animalId: number, date: CalendarDate) {
+      try {
+        this.loading = true;
+        this.error = null;
+
+        const animal = this.getAnimalById(animalId);
+        let currenOpenFood;
+        if (animal.food) {
+          currenOpenFood = animal.food.find(f => f.state === 'open');
+
+          if (!currenOpenFood) {
+            this.error = 'No food open';
+            this.loading = false;
+            return false;
+          }
+
+          const client = useSupabaseClient();
+          const { error } = await client.from('food').update({openDate: date.toString()}).eq('id', currenOpenFood.id);
+
+          if (error) {
+            console.error('Error while updating food open date :', error);
+            this.error = error.message;
+            return false;
+          }
+          await this.fetchAnimals();
+        }
+
+        return this.getAnimalById(animalId);
+      } catch (err) {
+        console.error('Error in finish food :', err);
+        this.error = err instanceof Error ? err.message : 'Unknown error';
+        return false;
+      } finally {
+        this.loading = false;
+      }
+    },
     async finishFood(animalId: number) {
       try {
         this.loading = true;
         this.error = null;
 
         const animal = this.getAnimalById(animalId);
-        let foodToFinish;
+        let currenOpenFood;
         if (animal.food) {
-          foodToFinish = animal.food.find(f => f.state === 'open');
+          currenOpenFood = animal.food.find(f => f.state === 'open');
 
-          if (!foodToFinish) {
+          if (!currenOpenFood) {
             this.error = 'No food open';
             this.loading = false;
             return false;
           }
-          foodToFinish.state = 'empty';
+          currenOpenFood.state = 'empty';
 
           const client = useSupabaseClient();
-          const { error } = await client.from('food').update(foodToFinish).eq('id', foodToFinish.id);
+          const { error } = await client.from('food').update(currenOpenFood).eq('id', currenOpenFood.id);
 
           if (error) {
             console.error('Error finishing food :', error);

@@ -4,7 +4,7 @@
       <UAvatar
           :src="avatar"
           icon="i-fluent-animal-dog-16-regular" :ui="{root: 'size-25 text-7xl'}" />
-      <div class="flex flex-col justify-center text-neutral-400">
+      <div class="flex flex-col justify-center text-neutral-500 dark:text-neutral-400">
         <div v-if="gender" class="text-xl">{{name}} <UIcon :name="gender === 'male' ? 'i-ic-baseline-male' : 'i-ic-baseline-female'" :class="[gender === 'male' ? 'text-blue-500' : 'text-pink-500']" /></div>
         <div>
           <span v-if="displayAge">{{displayAge}}</span>
