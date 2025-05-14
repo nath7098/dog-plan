@@ -11,6 +11,7 @@ export default interface Animal {
     weight: number,
     mealQuantity?: number,
     avatar?: string,
+    avatarDisplay?: string,
     weightHistory?: Weight[],
     fleaProtection?: Protection,
     wormProtection?: Protection,

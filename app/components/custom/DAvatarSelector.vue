@@ -17,11 +17,11 @@
           v-for="avatar in defAvatars"
           :key="avatar"
           class="cursor-pointer rounded-lg p-1 border-2 transition-all duration-200 transform hover:scale-105"
-          :class="modelValue === avatar ? 'border-primary-500 bg-primary-50' : 'border-transparent hover:border-neutral-200'"
+          :class="modelValue === avatar.fileURL ? 'border-primary-500 bg-primary-50' : 'border-transparent hover:border-neutral-200'"
           @click="updateValue(avatar)"
       >
         <UAvatar
-            :src="avatar"
+            :src="avatar.fileURL"
             size="lg"
             :ui="{ rounded: 'rounded-lg' }"
         />
@@ -53,7 +53,7 @@ const props = defineProps({
   avatars: {
     type: Array,
     default: () => [
-      'https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      {fileURL: 'https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', file: null},
     ]
   },
   defaultAvatar: {
@@ -67,8 +67,8 @@ const emit = defineEmits(['update:modelValue']);
 const fileInput = ref(null);
 const defAvatars = toRef(props.avatars);
 
-const updateValue = (path) => {
-  emit('update:modelValue', path);
+const updateValue = (a) => {
+  emit('update:modelValue', {fileURL: a.fileURL, file: a.file});
 };
 
 const openFileInput = () => {
@@ -85,8 +85,8 @@ const handleFileUpload = (event) => {
   // In a real app, you'd upload the file to your server here
   // and then update with the returned path
   // For this example, we'll just use the temporary URL
-  defAvatars.value.push(fileURL)
-  emit('update:modelValue', fileURL);
+  defAvatars.value.push({fileURL, file});
+  emit('update:modelValue', {fileURL, file});
 
   // Reset file input
   event.target.value = '';

@@ -36,7 +36,7 @@
           <div class="w-full flex justify-center items-center rounded-2xl shadow-sm bg-neutral-800/20 dark:bg-neutral-100/10 backdrop-blur-md ring-2 ring-neutral-100/20 dark:ring-neutral-700/20 overflow-hidden h-full">
               <UAvatar
                     icon="i-heroicons-plus"
-                    class="ring-3 ring-neutral-200 dark:ring-neutral-300 shadow-md"
+                    class="ring-3 ring-neutral-200 dark:ring-neutral-300 bg-neutral-50/30 dark:bg-neutral-950/30 backdrop-blur-sm my-12 md:my-0"
                     :ui="{root: 'size-24', icon: 'size-12'}"
                 />
 
@@ -56,10 +56,10 @@
               <!-- Avatar, positioned to overlay the banner -->
               <div class="flex justify-center items-center w-full mt-8">
                 <UAvatar
-                    :src="animal.avatar"
+                    :src="animal.avatarDisplay"
                     icon="i-fluent-animal-dog-16-regular"
                     :alt="animal.name"
-                    class="ring-3 ring-neutral-200 dark:ring-neutral-300 shadow-md"
+                    class="ring-3 ring-neutral-200 dark:ring-neutral-300 bg-neutral-50/30 dark:bg-neutral-950/30 backdrop-blur-sm"
                     :ui="{root: 'size-24', icon: 'size-12'}"
                 />
               </div>
@@ -113,7 +113,7 @@
               <!-- Health Status Indicators -->
               <div class="mt-4 grid grid-cols-2 gap-2">
                 <!-- Flea Protection -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
+                <div class="flex items-center gap-2 p-2 rounded-lg brackdrop-blur-sm bg-neutral-50/30 dark:bg-neutral-950/30 ring-1 ring-neutral-400/30 dark:ring-neutral-700/30">
                   <UIcon name="i-heroicons-bug-ant" size="sm" :class="[
                     !animal.fleaProtection || !animal.fleaProtection.end ||
                     isProtectionExpired(animal.fleaProtection) ? 'text-red-500' : 'text-green-500'
@@ -122,7 +122,7 @@
                 </div>
 
                 <!-- Worm Protection -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
+                <div class="flex items-center gap-2 p-2 rounded-lg brackdrop-blur-sm bg-neutral-50/30 dark:bg-neutral-950/30 ring-1 ring-neutral-400/30 dark:ring-neutral-700/30">
                   <UIcon name="i-fluent-emoji-high-contrast-worm" size="sm" :class="[
                     !animal.wormProtection || !animal.wormProtection.end ||
                     isProtectionExpired(animal.wormProtection) ? 'text-red-500' : 'text-green-500'
@@ -131,7 +131,7 @@
                 </div>
 
                 <!-- Food Status -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
+                <div class="flex items-center gap-2 p-2 rounded-lg brackdrop-blur-sm bg-neutral-50/30 dark:bg-neutral-950/30 ring-1 ring-neutral-400/30 dark:ring-neutral-700/30">
                   <UIcon name="i-tabler-dog-bowl" size="sm" :class="[
                     !animal.food?.length ? 'text-red-500' :
                     getFoodStatus(animal) === 'low' ? 'text-amber-500' : 'text-green-500'
@@ -140,7 +140,7 @@
                 </div>
 
                 <!-- Weight Status -->
-                <div class="flex items-center gap-2 p-2 rounded-lg bg-neutral-50 dark:bg-neutral-950">
+                <div class="flex items-center gap-2 p-2 rounded-lg brackdrop-blur-sm bg-neutral-50/30 dark:bg-neutral-950/30 ring-1 ring-neutral-400/30 dark:ring-neutral-700/30">
                   <UIcon name="i-healthicons-weight-outline" size="sm" :class="[
                     !animal.weight ? 'text-red-500' :
                     isWeightRecent(animal) ? 'text-green-500' : 'text-amber-500'
@@ -184,6 +184,10 @@ async function initializeStore() {
 onMounted(() => {
   initializeStore();
 });
+
+const getAvatar = async (animal) => {
+  return animalStore.getAvatar(animal);
+}
 
 const age = (bd) => {
   return calculAge(bd);

@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen relative">
-    <div class="absolute inset-0 bg-fixed bg-cover bg-center dark:[background-image:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)] [background-image:radial-gradient(125%_125%_at_50%_10%,#fee685_4%,#fff_50%)]"></div>
+    <div class="-z-1 absolute inset-0 bg-fixed bg-cover bg-center dark:[background-image:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)] [background-image:radial-gradient(125%_125%_at_50%_10%,#fee685_4%,#fff_50%)]"></div>
     <!-- Top Navigation (Desktop) -->
      
     <nav class="hidden md:flex fixed top-0 left-0 right-0 backdrop-blur-md shadow-sm z-50 px-4">
@@ -23,7 +23,7 @@
           <!-- User Menu (Right) -->
           <div class="flex items-center gap-3">
             <UDropdownMenu :items="userMenuItems" :popper="{ placement: 'bottom-end' }">
-              <UButton variant="ghost" class="rounded-full">
+              <UButton variant="link" class="rounded-full cursor-pointer">
                 <UAvatar
                     :src="user?.user_metadata?.avatar_url"
                     :alt="user?.user_metadata?.full_name || ''"
@@ -47,14 +47,9 @@
       <div class="flex justify-around items-center h-16">
         <DNavLinkMobile to="/" icon="i-heroicons-home" label="Accueil" />
         <DNavLinkMobile to="/stats" icon="i-heroicons-chart-bar" label="Stats" />
-        <DNavLinkMobile
-            to="/nouveau"
-            icon="i-heroicons-plus-circle"
-            label="Nouveau"
-            class="relative -mt-8 bg-gradient-to-r from-amber-500 to-amber-600 text-white p-4 rounded-full shadow-lg"
-        />
         <DNavLinkMobile to="/calendar" icon="i-heroicons-calendar" label="Agenda" />
         <DNavLinkMobile to="/settings" icon="i-heroicons-cog-6-tooth" label="Réglages" />
+        <DNavLinkMobile to="/profile" :avatar="user?.user_metadata?.avatar_url" icon="i-heroicons-user" label="Profile" />
       </div>
     </nav>
   </div>

@@ -67,7 +67,7 @@
           </UFormField>
 
           <!-- Avatar selection -->
-          <DAvatarSelector :model-value="formData.avatar" :avatars="avatars" @update:model-value="formData.avatar = $event" />
+          <DAvatarSelector :model-value="formData.avatar.fileURL" :avatars="avatars" @update:model-value="onSelectAvatar" />
         </div>
       </div>
 
@@ -104,7 +104,7 @@ const router = useRouter();
 const animalStore = useAnimalStore();
 
 const avatars = ref([
-  'https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  {fileURL: 'https://images.unsplash.com/photo-1678818546240-2702b53da4da?q=80&w=1934&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', file: null},
 ])
 
 // Form data with default values
@@ -115,7 +115,7 @@ const formData = ref({
   type: 'Dog',
   weight: null,
   mealQuantity: null,
-  avatar: '',
+  avatar: {fileURL: '', file: null},
 });
 
 // Pet type options
@@ -134,6 +134,10 @@ const displayedAge = computed(() => {
   return ageToString(age!);
 });
 
+const onSelectAvatar = (avatarData: {fileURL: string, file: File}) => {
+  formData.value.avatar = avatarData;
+}
+
 // Save pet to store and navigate to home
 const savePet = async () => {
   // Validate required fields
@@ -148,9 +152,8 @@ const savePet = async () => {
     type: formData.value.type,
     weight: formData.value.weight,
     mealQuantity: formData.value.mealQuantity,
-    avatar: formData.value.avatar,
     weightHistory: formData.value.weight ? [formData.value.weight] : []
-  });
+  }, formData.value.avatar);
 
   // Navigate to home page
   router.push('/');

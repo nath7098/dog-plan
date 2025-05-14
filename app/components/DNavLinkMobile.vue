@@ -7,7 +7,13 @@
     ]"
       :style="className ? {} : {}"
   >
-    <UIcon :name="icon" class="h-6 w-6" />
+    <UAvatar
+        :src="avatar"
+        :alt="avatarAlt"
+        :icon="icon"
+        class="size-6"
+    />
+<!--    <UIcon :name="icon" class="h-6 w-6" />-->
     <span>{{ label }}</span>
   </NuxtLink>
 </template>
@@ -18,9 +24,17 @@ const props = defineProps({
     type: String,
     required: true
   },
+  avatar: {
+    type: String,
+    required: false
+  },
+  avatarAlt: {
+    type: String,
+    required: false
+  },
   icon: {
     type: String,
-    required: true
+    required: false
   },
   label: {
     type: String,

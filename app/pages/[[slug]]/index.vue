@@ -6,12 +6,14 @@
   <div v-else class="p-6 max-w-6xl mx-auto">
     <DCard>
       <DProfileHeader
-          :avatar="animal.avatar"
+          :avatar="animal.avatarDisplay"
           :name="animal.name"
           :gender="animal.gender"
           :birth-date="animal.birthDate"
           :weight="animal.weight"
-          @open:weight="toggleWeightHistory" />
+          @open:weight="toggleWeightHistory"
+          @change:avatar="onChangeAvatar"
+      />
     </DCard>
 
     <!-- Cards Grid Layout -->
@@ -132,6 +134,10 @@ const displayAge = computed(() => {
 const toggleWeightHistory = () => {
   showWeightHistory.value = !showWeightHistory.value;
 };
+
+const onChangeAvatar = async (newAvatar: {fileURL: string, file: File}) => {
+  animal.value = await animalStore.updateAnimalAvatar(animal.value, newAvatar);
+}
 
 const updateWeight = async (newWeight: Weight) => {
   animal.value = await animalStore.addWeightHistory(animal.value.id, newWeight);
