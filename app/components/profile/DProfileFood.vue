@@ -2,7 +2,7 @@
   <div>
     <div class="mb-6">
       <h2 class="text-4xl ">Nourriture</h2>
-      <p v-if="meal" class="font-italic">{{ name }} mange
+      <p class="font-italic">{{ name }} mange
         <UInput v-model="meal" type="text" variant="ghost" color="neutral" class="relative meal"
           :style="{ width: `${(meal + '').length + 4}ch` }" @change="updateMealQuantity" />
         de croquettes par jour !
@@ -17,8 +17,7 @@
       <UButton v-if="currentFoodBag" icon="i-lucide-package-open" variant="link"
         class="cursor-pointer relative overflow-hidden current-food text-neutral-800! dark:text-neutral-100! rounded-full backdrop-blur-sm ring-2 ring-neutral-100/20 dark:ring-neutral-700/20 py-3! px-6!"
         @click="finishFoodBag">
-        <span :class="['current-food-progress', 'absolute', 'top-0 left-0 bottom-0 ',
-          {
+        <span :class="['current-food-progress', 'absolute', 'top-0 left-0 bottom-0 ', {
             'bg-green-500/25': currentFoodBag.used.percentage < 75,
             'bg-amber-500/25': currentFoodBag.used.percentage >= 75 && currentFoodBag.used.percentage < 90,
             'bg-red-500/25md ': currentFoodBag.used.percentage >= 90
@@ -38,7 +37,7 @@
           !</span>
       </UButton>
     </div>
-    <div v-if="currentFoodBagDate" class="mt-8 flex flex-col gap-y-4">
+    <div v-if="currentFoodBagDate" class="mt-16 flex flex-col gap-y-4">
       <div class="text-neutral-800! dark:text-neutral-100! rounded-full backdrop-blur-sm ring-2 ring-neutral-100/20 dark:ring-neutral-700/20 py-3! px-6!">
         <div class="flex justify-start items-center">
         <UIcon name="i-ic-baseline-edit-calendar" color="neutral" />
@@ -110,6 +109,10 @@ const openFoodBag = async () => {
 }
 
 const updateMealQuantity = async () => {
+  if (!meal.value || meal.value === '' || meal.value === '0') {
+    meal.value = animal.value?.mealQuantity!;
+    return;
+  }
   animal.value = await animalStore.updateAnimal(animal.value.id, { mealQuantity: Number(meal.value!) });
 }
 

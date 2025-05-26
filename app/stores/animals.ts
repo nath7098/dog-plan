@@ -192,7 +192,7 @@ export const useAnimalStore = defineStore('animals', {
                 }
 
                 await this.fetchAnimals();
-                return true;
+                return this.getAnimalById(id);
             } catch (err) {
                 console.error('Error in updateAnimal:', err);
                 this.error = err instanceof Error ? err.message : 'Unknown error';

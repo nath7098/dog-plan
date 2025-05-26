@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { CalendarDate, isSameDay, isSameMonth, isToday, today, endOfMonth } from '@internationalized/date'
+import { CalendarDate, isSameDay, isSameMonth, isToday, today, endOfMonth, startOfMonth, getDayOfWeek, getLocalTimeZone } from '@internationalized/date'
 
 const props = defineProps({
   rangeLength: {
@@ -55,7 +55,7 @@ const props = defineProps({
 });
 const emits = defineEmits(['select:date']);
 
-const weekDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+const weekDays = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
 const currentMonth = ref(today());
 const startRef = toRef(props.start);
 const lengthRef = toRef(props.rangeLength);
@@ -66,7 +66,7 @@ const selectedRange = ref({
 
 // Calculate month name
 const monthName = computed(() => {
-  return currentMonth.value.toDate().toLocaleString('default', {month: 'long', year: 'numeric'});
+  return currentMonth.value.toDate().toLocaleString('fr-FR', {month: 'long', year: 'numeric'});
 });
 
 // Navigate to previous month
@@ -149,30 +149,27 @@ const isTodayDay = (day) => {
 
 // Generate calendar days for current month view
 const calendarDays = computed(() => {
+  const days: Array<CalendarDate> = [];
+
   const year = currentMonth.value.year;
   const month = currentMonth.value.month;
 
-  // Last day of the month
-  const lastDay = endOfMonth(today()).day;
+  const firstDay = startOfMonth(currentMonth.value);
+  const firstDayDayOfWeek = getDayOfWeek(firstDay, 'fr-FR');
+  const prevMonthLastDay = endOfMonth(currentMonth.value.add({months: -1}));
 
-  // Get starting day of week (0 = Sunday, 1 = Monday, etc.)
-  const daysFromPrevMonth = 1;
+  for (let i = firstDayDayOfWeek; i > 0; i--) {
+    days.push(prevMonthLastDay.add({days: -1 * i + 1}));
+  }
+
+  const lastDay = endOfMonth(currentMonth.value);
+
+  for (let i = 0; i < lastDay.day - 1; i++) {
+    days.push(firstDay.add({days: i}));
+  }
 
   // Calculate total days to render (6 weeks)
   const totalDays = 42; // 6 rows of 7 days
-
-  const days: Array<CalendarDate> = [];
-
-  // Previous month days
-  const prevMonthLastDay = endOfMonth(today().add({months: -1})).day;
-  for (let i = prevMonthLastDay - daysFromPrevMonth + 1; i <= prevMonthLastDay; i++) {
-    days.push(new CalendarDate(year, month - 1, i));
-  }
-
-  // Current month days
-  for (let i = 1; i <= lastDay; i++) {
-    days.push(new CalendarDate(year, month, i));
-  }
 
   // Next month days
   const remainingDays = totalDays - days.length;

@@ -17,7 +17,6 @@
             <DNavLink to="/stats" icon="i-heroicons-chart-bar" label="Statistiques"/>
             <DNavLink to="/calendar" icon="i-heroicons-calendar" label="Calendrier"/>
             <DNavLink to="/settings" icon="i-heroicons-cog-6-tooth" label="Paramètres"/>
-            <UButton variant="link" class="text-amber-500! dark:hover:text-amber-400/80! hover:text-amber-700/80! cursor-pointer" :icon="colorMode.value === 'light' ? 'i-lucide-sun' : 'i-lucide-moon'" @click="switchColorMode" />
           </div>
 
           <!-- User Menu (Right) -->
@@ -96,11 +95,7 @@ const userMenuItems = computed(() => [
 
 // Handle logout (integrate with your auth system)
 const { auth } = useSupabaseClient();
-const colorMode = useColorMode();
 
-const switchColorMode = () => {
-  colorMode.value = colorMode.value === 'light' ? 'dark' : 'light';
-}
 
 const logout = async () => {
   try {
