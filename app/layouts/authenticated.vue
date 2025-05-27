@@ -43,7 +43,7 @@
 
     <!-- Bottom Navigation (Mobile) -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white/30 dark:bg-indigo-950/30 backdrop-blur-md  shadow-[0_-2px_10px_rgba(0,0,0,0.05)] dark:shadow-[0_-2px_10px_rgba(0,0,0,0.2)] z-50">
-      <div class="flex justify-around items-center h-16">
+      <div class="flex justify-around items-start pt-2 h-20">
         <DNavLinkMobile to="/" icon="i-heroicons-home" label="Accueil" />
         <DNavLinkMobile to="/stats" icon="i-heroicons-chart-bar" label="Stats" />
         <DNavLinkMobile to="/calendar" icon="i-heroicons-calendar" label="Agenda" />
@@ -57,6 +57,7 @@
 <script setup>
 // Access authentication user
 import DNavLinkMobile from '~/components/DNavLinkMobile.vue';
+
 
 const user = useSupabaseUser();
 

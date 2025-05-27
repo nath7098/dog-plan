@@ -12,6 +12,17 @@ export default defineNuxtConfig({
         '@vite-pwa/nuxt',
     ],
     css: ['~/assets/css/main.css'],
+    app: {
+        head: {
+            title: 'Paw Data',
+            htmlAttrs: 'fr',
+            meta: [
+                {name: 'viewport', content: 'initial-scale=1, viewport-fit=cover, width=device-width'},
+                {name: 'apple-mobile-web-app-capable', content: 'yes'},
+                {name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent'}
+            ]
+        }
+    },
     shadcn: {
         prefix: 'D',
         componentDir: './components/ui'
@@ -21,6 +32,8 @@ export default defineNuxtConfig({
             name: 'Paw Data',
             short_name: 'Paw Data',
             description: 'Manage data for you pets !',
+            orientation: 'portrait',
+            theme_color: '#ffc300',
             icons: [
                 {src: '/android-chrome-192x192.png', sizes: '192x192', type: 'image/png'},
                 {src: '/android-chrome-512x512.png', sizes: '512x512', type: 'image/png'}
