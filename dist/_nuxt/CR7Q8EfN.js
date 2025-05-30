@@ -1,1 +1,0 @@
-import{_ as e,c as a,o as n,p as s}from"./Dzi8umfP.js";const t={},o={class:"rounded-xl bg-neutral-800/20 dark:bg-neutral-100/10 backdrop-blur-sm ring-2 ring-neutral-100/20 dark:ring-neutral-700/20 p-6 shadow-sm"};function c(r,d){return n(),a("div",o,[s(r.$slots,"default")])}const _=Object.assign(e(t,[["render",c]]),{__name:"CustomDCard"});export{_ as D};

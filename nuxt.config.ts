@@ -29,7 +29,8 @@ export default defineNuxtConfig({
             input: {
                 main: 'app.vue',
                 sw: '/service-worker.js'
-            }
+            },
+            external: ['@capacitor/core']
         }
     },
     shadcn: {

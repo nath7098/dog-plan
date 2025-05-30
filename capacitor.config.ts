@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.nath7098.pawdata',
   appName: 'PawData',
-  webDir: 'dist',
+  webDir: '.output/public',
   ios: {
     bundleIdentifier: 'com.nath7098.pawdata',
     splash: {
