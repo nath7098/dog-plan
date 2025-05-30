@@ -1,0 +1,1 @@
+function s(t){if(!t)return;const n=new Date(t),r=new Date;let o=r.getFullYear()-n.getFullYear(),e=r.getMonth()-n.getMonth();return e<0||e===0&&r.getDate()<n.getDate()?(o--,e=12+e+ +(e===0),{years:o,months:e}):{years:o,months:e}}function a(t){if(t)return t.years===0?`${t.months} mois`:`${t.years} an${t.years>1?"s":""} ${t.months} mois`}export{a,s as c};

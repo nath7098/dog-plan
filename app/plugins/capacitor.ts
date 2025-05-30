@@ -1,4 +1,4 @@
-import {App, BackButton} from '@capacitor/app';
+import {App} from '@capacitor/app';
 
 export default defineNuxtPlugin(() => {
     App.addListener('backButton', () => {
