@@ -12,6 +12,12 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
+    "@capacitor/app": "^7.0.1",
+    "@capacitor/cli": "^7.2.0",
+    "@capacitor/core": "^7.2.0",
+    "@capacitor/haptics": "^7.0.1",
+    "@capacitor/ios": "^7.2.0",
+    "@capacitor/keyboard": "^7.0.1",
     "@iconify-json/lucide": "^1.2.38",
     "@iconify-json/simple-icons": "^1.2.33",
     "@nuxt/ui": "^3.0.2",

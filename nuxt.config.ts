@@ -23,6 +23,15 @@ export default defineNuxtConfig({
             ]
         }
     },
+    build: {
+        transpile: ['@capacitor/app'],
+        rollupOptions: {
+            input: {
+                main: 'app.vue',
+                sw: '/service-worker.js'
+            }
+        }
+    },
     shadcn: {
         prefix: 'D',
         componentDir: './components/ui'
