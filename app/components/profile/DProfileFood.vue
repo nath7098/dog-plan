@@ -20,9 +20,9 @@
         <span :class="['current-food-progress', 'absolute', 'top-0 left-0 bottom-0 ', {
             'bg-green-500/25': currentFoodBag.used.percentage < 75,
             'bg-amber-500/25': currentFoodBag.used.percentage >= 75 && currentFoodBag.used.percentage < 90,
-            'bg-red-500/25md ': currentFoodBag.used.percentage >= 90
+            'bg-red-500/25': currentFoodBag.used.percentage >= 90
           }]"
-          :style="{ width: `${currentFoodBag.used.display}%` }"></span>
+          :style="{ width: `${currentFoodBag.used.percentage}%` }"></span>
         <span class="current-food-text text-neutral-800 dark:text-neutral-100">{{ currentFoodBag.brand }} - {{
           currentFoodBag.weight }} kg</span>
         <span class="current-food-finish text-neutral-800 dark:text-neutral-100">Sac terminé !</span>
@@ -64,10 +64,10 @@ import type Animal from '~~/types/animal';
 const props = defineProps(['name']);
 const emits = defineEmits(['update:meal', 'open:food', 'finish:food']);
 const animalStore = useAnimalStore();
-const animal = ref<Animal>(null);
+const animal = ref<Animal | null>(null);
 
-const meal = ref(null);
-const currentFoodBagDate = ref<CalendarDate>(null);
+const meal = ref<number | null>(null);
+const currentFoodBagDate = ref<CalendarDate | null>(null);
 const currentFoodBag = computed(() => {
   const current = animal.value?.food?.find(f => f.state === 'open');
   if (!current) {
@@ -86,8 +86,8 @@ watch(currentFoodBag, () => {
 }, {deep: true});
 
 onMounted(() => {
-  animal.value = animalStore.animalByName(props.name)!;
-  meal.value = animal.value?.mealQuantity!;
+  animal.value = animalStore.animalByName(props.name);
+  meal.value = animal.value?.mealQuantity || null;
 })
 
 const addFoodBag = async () => {
@@ -109,11 +109,13 @@ const openFoodBag = async () => {
 }
 
 const updateMealQuantity = async () => {
-  if (!meal.value || meal.value === '' || meal.value === '0') {
-    meal.value = animal.value?.mealQuantity!;
+  if (!meal.value || meal.value === 0) {
+    meal.value = animal.value?.mealQuantity || null;
     return;
   }
-  animal.value = await animalStore.updateAnimal(animal.value.id, { mealQuantity: Number(meal.value!) });
+  if (animal.value) {
+    animal.value = await animalStore.updateAnimal(animal.value.id, { mealQuantity: Number(meal.value) });
+  }
 }
 
 const onUpdateDateOpenFoodBag = async (date: CalendarDate) => {
